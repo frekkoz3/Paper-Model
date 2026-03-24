@@ -1,0 +1,21 @@
+{
+    "page" : {   
+    "width" : 1080,
+    "height" : 1920,
+    "header probability" : 0.1,
+    "footer probability" : 0.1,
+    "minimum column width" : 100, 
+    "minimum section height" : 150,
+    "upper margin" : 100,
+    "lower margin" : 100, 
+    "right margin" : 100, 
+    "left margin" : 100,
+    "between section margin" : 100,
+    "column margin" : 10
+    },
+    "header" : {},
+    "footer" : {},
+    "section" : {},
+    "banner" : {},
+    "article" : {}
+}
