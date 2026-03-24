@@ -10,11 +10,28 @@
 
     A simple rule-based model to generate realistical newspapers' pages for the training of the YOLO-Layout model.
 """
+import random
 
 class Footer:
 
-    def __init__(self, page):
-        pass
+    def __init__(self, page, x, y, dx, dy):
+        self.anchor = page
+        self.x = x
+        self.y = y
+        self.width = dx
+        self.height = dy
 
     def render(self):
-        pass
+        return f"""
+        <div class="footer" style="
+            position: absolute;
+            left: {self.x}px;
+            top: {self.y}px;
+            width: {self.width}px;
+            height: {self.height}px;
+            border: 2px solid green;
+            background-color: rgba(0, 255, 0, 0.1);
+        ">
+            <span style="font-size:10px;">FOOTER</span>
+        </div>
+        """

@@ -13,5 +13,24 @@
 
 class Header:
 
-    def __init__(self, page):
-        pass
+    def __init__(self, page, x, y, dx, dy):
+        self.anchor = page
+        self.x = x
+        self.y = y
+        self.width = dx
+        self.height = dy
+
+    def render(self):
+        return f"""
+        <div class="header" style="
+            position: absolute;
+            left: {self.x}px;
+            top: {self.y}px;
+            width: {self.width}px;
+            height: {self.height}px;
+            border: 2px solid blue;
+            background-color: rgba(0, 0, 255, 0.1);
+        ">
+            <span style="font-size:10px;">HEADER</span>
+        </div>
+        """

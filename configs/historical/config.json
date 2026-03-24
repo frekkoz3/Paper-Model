@@ -4,19 +4,23 @@
         "height" : 1920,
         "header probability" : 0.1,
         "footer probability" : 0.1,
-        "minimum column width" : 100, 
-        "minimum section height" : 150,
-        "upper margin" : 100,
-        "lower margin" : 100, 
-        "right margin" : 100, 
-        "left margin" : 100,
+        "minimum column width" : 280, 
+        "minimum section height" : 250,
+        "upper margin" : 20,
+        "lower margin" : 20, 
+        "right margin" : 25, 
+        "left margin" : 25,
         "between section margin" : 100,
         "column margin" : 10
     },
-    "header" : {},
-    "footer" : {},
+    "header" : {
+        "height" : [150, 300]
+    },
+    "footer" : {
+        "height" : [80, 150]
+    },
     "section" : {
-        "split probability": 0.7,
+        "split probability": 0.75,
         "recursion limit": 3
     },
     "banner" : {},

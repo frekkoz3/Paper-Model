@@ -57,7 +57,62 @@ class Section:
         return [*s1.split(), *s2.split()]
 
     def generate(self):
+        self.generate_columns()
+        self.place_banners()
+        self.generate_articles()
+
+    def generate_columns(self):
+        """
+            Function to generate columns
+        """
+        available_width = self.dx
+        min_w = self.anchor.minimum_column_width
+        margin = self.anchor.column_margin
+
+        max_cols = int(available_width // min_w)
+        
+        n_cols = random.randint(1, max_cols) if max_cols > 1 else 1
+
+        col_width = (available_width - (n_cols - 1) * margin) / n_cols
+
+        self.columns = []
+        for i in range(n_cols):
+            # x = self.x + i * (col_width + margin)
+            x = i * (col_width + margin)   # relative to section
+            y = 0
+            self.columns.append({
+                "x": x,
+                "y": y,
+                "width": col_width,
+                "height": self.dy,
+                "cursor_y": self.y  # where next content goes
+            })
+
+
+    def place_banners(self):
+        pass
+    
+    def generate_articles(self):
         pass
 
     def render(self):
-        pass
+        html = f"""
+        <div class="section" style="
+            left:{self.x}px;
+            top:{self.y}px;
+            width:{self.dx}px;
+            height:{self.dy}px;">
+        """
+
+        for col in self.columns:
+            html += f"""
+            <div class="column" style="
+                left:{col['x']}px;
+                top:{col['y']}px;
+                width:{col['width']}px;
+                height:{col['height']}px;">
+            </div>
+            """
+
+        html += "</div>"
+        return html
