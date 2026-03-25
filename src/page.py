@@ -133,7 +133,7 @@ class Page:
 
         html += "</div></body></html>"
 
-        with open("debug.html", "w") as f:
+        with open("src/debug.html", "w") as f:
             f.write(html)
 
 if __name__ == '__main__':
