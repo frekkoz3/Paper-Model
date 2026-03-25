@@ -6,11 +6,11 @@
         "footer probability" : 0.1,
         "minimum column width" : 280, 
         "minimum section height" : 250,
-        "upper margin" : 20,
-        "lower margin" : 20, 
-        "right margin" : 25, 
-        "left margin" : 25,
-        "between section margin" : 100,
+        "upper margin" : {"mu" : 35, "sigma" : 5, "min" : 20, "max" : 50},
+        "lower margin" : {"mu" : 35, "sigma" : 5, "min" : 20, "max" : 50}, 
+        "right margin" : {"mu" : 25, "sigma" : 5, "min" : 10, "max" : 40}, 
+        "left margin" : {"mu" : 25, "sigma" : 5,  "min" : 10, "max" : 40},
+        "between section margin" : {"mu" : 20, "sigma" : 5,  "min" : 10, "max" : 30},
         "column margin" : 10
     },
     "header" : {

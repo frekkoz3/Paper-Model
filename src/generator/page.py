@@ -12,9 +12,9 @@
 """
 import json
 import random
-from src.header import Header
-from src.footer import Footer
-from src.section import Section
+from src.generator.header import Header
+from src.generator.footer import Footer
+from src.generator.section import Section
 from src.utils import random_datetime
 
 class Page:
@@ -38,13 +38,13 @@ class Page:
         self.minimum_column_width = page_cfg["minimum column width"]
         self.minimum_section_height = page_cfg["minimum section height"]
 
-        self.upper_margin = page_cfg["upper margin"]
-        self.lower_margin = page_cfg["lower margin"]
-        self.right_margin = page_cfg["right margin"]
-        self.left_margin = page_cfg["left margin"]
+        self.upper_margin = min(page_cfg["upper margin"]["max"], max(page_cfg["upper margin"]["min"], random.gauss(mu = page_cfg["upper margin"]["mu"], sigma = page_cfg["upper margin"]["sigma"])))
+        self.lower_margin = min(page_cfg["lower margin"]["max"], max(page_cfg["lower margin"]["min"], random.gauss(mu = page_cfg["lower margin"]["mu"], sigma = page_cfg["lower margin"]["sigma"])))
+        self.right_margin = min(page_cfg["right margin"]["max"], max(page_cfg["right margin"]["min"], random.gauss(mu = page_cfg["right margin"]["mu"], sigma = page_cfg["right margin"]["sigma"])))
+        self.left_margin = min(page_cfg["left margin"]["max"], max(page_cfg["left margin"]["min"], random.gauss(mu = page_cfg["left margin"]["mu"], sigma = page_cfg["left margin"]["sigma"])))
 
         self.column_margin = page_cfg["column margin"]
-        self.between_section_margin = page_cfg["between section margin"]
+        self.between_section_margin = page_cfg["between section margin"] # remember this is the parameter for a truncated gaussian
 
         # SECTION PARAMS
         self.recursion_limit = section_cfg["recursion limit"]
@@ -133,7 +133,7 @@ class Page:
 
         html += "</div></body></html>"
 
-        with open("src/debug.html", "w") as f:
+        with open("src/generator/debug.html", "w") as f:
             f.write(html)
 
 if __name__ == '__main__':

@@ -10,7 +10,7 @@
 
     A simple rule-based model to generate realistical newspapers' pages for the training of the YOLO-Layout model.
 """
-from src.page import Page
+from src.generator.page import Page
 class YOLOv10Annotator:
 
     def __init__(self, page : Page):

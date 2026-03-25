@@ -11,7 +11,7 @@
     A simple rule-based model to generate realistical newspapers' pages for the training of the YOLO-Layout model.
 """
 import random
-from src.banner import Banner
+from src.generator.banner import Banner
 
 class Section:
 
