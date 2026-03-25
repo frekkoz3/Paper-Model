@@ -97,7 +97,7 @@ class Page:
         ).split()
 
     def render(self):
-        # to insert the fact that css is actually taken by external files
+        # to insert the fact that css is actually taken by external files and it is dynamic
         html = f"""
         <html>
         <head>
