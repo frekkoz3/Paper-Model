@@ -56,7 +56,7 @@ class Section:
 
         return [*s1.split(), *s2.split()]
 
-    def generate(self):
+    def _generate(self):
         self.generate_columns()
         self.place_banners()
         self.generate_articles()

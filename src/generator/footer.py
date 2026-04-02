@@ -20,6 +20,20 @@ class Footer:
         self.y = y
         self.width = dx
         self.height = dy
+        self._generate()
+
+    def _generate(self):
+        """
+        Footer usually presents simple components.
+        Things like:
+        - straight lines
+        - bar code (the newest one)
+        - prices 
+        - partnership advertisement
+        - legal/burocratic little text
+        - page number
+        """
+        pass
 
     def render(self):
         return f"""

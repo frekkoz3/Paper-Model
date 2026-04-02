@@ -16,7 +16,12 @@ class Article:
         Class to generate random articles.
     """
 
-    def __init__(self, config : str):
+    def __init__(self):
+        self._generate()
+
+    def _generate(self):
+        """
+        """
         self.title = ...
         self.subtitle = ...
         self.corpus = ...

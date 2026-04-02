@@ -26,7 +26,7 @@ class Page:
         page_cfg = config["page"]
         section_cfg = config["section"]
         header_cfg = config["header"]
-        footer_cfg = config["header"]
+        footer_cfg = config["footer"]
 
         # PAGE PARAMS
         self.width = page_cfg["width"]
@@ -95,6 +95,8 @@ class Page:
             self.section_space["y_max"] - self.section_space["y_min"],
             0
         ).split()
+        for section in self.sections:
+            section._generate()
 
     def render(self):
         # to insert the fact that css is actually taken by external files and it is dynamic
