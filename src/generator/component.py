@@ -10,18 +10,21 @@ r"""
 
     A simple rule-based model to generate realistical newspapers' pages for the training of the YOLO-Layout model.
 """
-import requests
-from src.generator.component import Component
-
-# consider using also something from 
-# https://people.cs.pitt.edu/~kovashka/ads_workshop/#intro
-# in order to obtains random advertisement images (really helpful)
-
-class Banner(Component):
+class Component:
+    """
+        Basic layout component of the article.
+    """
+    
+    def __init__(self, anchor_page, x, y, width, height):
+        self.anchor = anchor_page
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self._generate()
 
     def _generate(self):
-        url = f"https://picsum.photos/{self.width}/{self.height}"
-        self.img = requests.get(url)
+        pass
 
     def render(self):
         pass

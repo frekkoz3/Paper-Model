@@ -10,16 +10,9 @@ r"""
 
     A simple rule-based model to generate realistical newspapers' pages for the training of the YOLO-Layout model.
 """
+from src.generator.component import Component
 
-class Header:
-
-    def __init__(self, page, x, y, dx, dy):
-        self.anchor = page
-        self.x = x
-        self.y = y
-        self.width = dx
-        self.height = dy
-        self._generate()
+class Header(Component):
 
     def _generate(self):
         """

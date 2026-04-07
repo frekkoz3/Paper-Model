@@ -67,10 +67,7 @@ class Page:
 
         self.generate_header()
         self.generate_footer()
-        self.generate_sections()    
-
-        for section in self.sections:
-            section.generate()
+        self.generate_sections()
 
     def generate_header(self):
         self.header = None

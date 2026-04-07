@@ -10,6 +10,9 @@ r"""
 
     A simple rule-based model to generate realistical newspapers' pages for the training of the YOLO-Layout model.
 """
+from faker import Faker
+import random
+
 class Article:
 
     """
@@ -17,13 +20,23 @@ class Article:
     """
 
     def __init__(self):
+        self.fake = Faker()
         self._generate()
 
     def _generate(self):
         """
+        Generate using Faker library random sentences that resamble articles (not just Lorem Ipsum).
         """
-        self.title = ...
-        self.subtitle = ...
-        self.corpus = ...
-        self.author = ...
-        self.symbols = ...
+        self.title = self.fake.sentence(nb_words=6, variable_nb_words=True)
+        self.subtitle = self.fake.sentence(nb_words=10, variable_nb_words=True)
+        self.corpus = " ".join(self.fake.paragraphs(nb=random.randrange(3, 8)))
+        self.author = self.fake.name()
+        # self.symbols = ... THIS SHOULD BE ADDED 
+    
+    def __str__(self):
+        s = ""
+        return f"{self.title}\n-----------------\n{self.subtitle}\n-----------------\n{self.corpus}\n-----------------\n{self.author}"
+
+if __name__ == '__main__':
+    a = Article()
+    print(a)
