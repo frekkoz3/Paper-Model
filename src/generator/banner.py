@@ -17,6 +17,16 @@ from src.generator.component import Component
 # https://people.cs.pitt.edu/~kovashka/ads_workshop/#intro
 # in order to obtains random advertisement images (really helpful)
 
+# or also 
+# https://huggingface.co/datasets/yunusserhat/TextOCR-Dataset
+# https://huggingface.co/datasets/howard-hou/COCO-Text
+# https://github.com/cs-chan/Total-Text-Dataset
+# https://www.kaggle.com/datasets/dataclusterlabs/vertical-text
+# for images with text within it
+
+# banner could also been just simple symbols within a black-bordered box
+# and some text within it (old one especially)
+
 class Banner(Component):
 
     def _generate(self):
