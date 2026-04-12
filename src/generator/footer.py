@@ -30,15 +30,11 @@ class Footer(Component):
 
     def render(self):
         return f"""
-        <div class="footer" style="
-            position: absolute;
-            left: {self.x}px;
-            top: {self.y}px;
-            width: {self.width}px;
-            height: {self.height}px;
-            border: 2px solid green;
-            background-color: rgba(0, 255, 0, 0.1);
-        ">
-            <span style="font-size:10px;">FOOTER</span>
+        <div class="footer"
+            style="--x:{self.x}px;
+                    --y:{self.y}px;
+                    --w:{self.width}px;
+                    --h:{self.height}px;">
+            Page 1
         </div>
         """

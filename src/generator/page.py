@@ -96,44 +96,50 @@ class Page:
             section._generate()
 
     def render(self):
-        # to insert the fact that css is actually taken by external files and it is dynamic
+        header_h = self.header.height if self.header else 0
+        footer_h = self.footer.height if self.footer else 0
+
         html = f"""
         <html>
         <head>
-        <style>
-            .page {{
-                position: relative;
-                width: {self.width}px;
-                height: {self.height}px;
-                border: 2px solid black;
-            }}
-            .section {{
-                position: absolute;
-                border: 1px solid red;
-            }}
-            .column {{
-                position: absolute;
-                border: 1px dashed blue;
-            }}
-        </style>
+            <meta charset="UTF-8">
+            <link rel="stylesheet" href="/css/styles.css">
         </head>
+
         <body>
-        <div class="page">
+
+        <div class="page"
+            style="--header-h:{header_h}px;
+                --footer-h:{footer_h}px;">
         """
 
         if self.header:
             html += self.header.render()
 
-        if self.footer:
-            html += self.footer.render()
+        html += """
+        <div class="content">
+        """
 
         for section in self.sections:
             html += section.render()
 
-        html += "</div></body></html>"
+        html += """
+        </div>
+        """
 
-        with open("src/generator/debug.html", "w") as f:
+        if self.footer:
+            html += self.footer.render()
+
+        html += """
+        </div>
+
+        </body>
+        </html>
+        """
+
+        with open("output/debug.html", "w", encoding="utf-8") as f:
             f.write(html)
+
 
 if __name__ == '__main__':
 

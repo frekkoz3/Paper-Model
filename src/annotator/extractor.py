@@ -10,6 +10,14 @@ r"""
 
     A simple rule-based model to generate realistical newspapers' pages for the training of the YOLO-Layout model.
 """
+
+# classes for the model
+# 1 -> header 
+# 2 -> footer
+# 3 -> column
+# 4 -> advertisement
+# these should be sufficient since we want to handle patches later on
+
 from src.generator.page import Page
 class YOLOv10Annotator:
 

@@ -12,7 +12,6 @@ r"""
 """
 from faker import Faker
 import random
-from src.generator.component import Component
 
 class Article():
 
@@ -30,41 +29,25 @@ class Article():
         """
         self.title = self.fake.sentence(nb_words=6, variable_nb_words=True)
         self.subtitle = self.fake.sentence(nb_words=10, variable_nb_words=True)
-        self.corpus = " ".join(self.fake.paragraphs(nb=random.randrange(3, 8)))
+        self.corpus = " ".join(self.fake.paragraphs(nb=random.randrange(10, 20)))
         self.author = self.fake.name()
         # self.symbols = ... THIS SHOULD BE ADDED 
-    
+
+    def render(self, is_main=False):
+        main_class = "article article-main" if is_main else "article"
+
+        return f"""
+        <article class="{main_class}">
+            <div class="article-title">{self.title}</div>
+            <div class="article-subtitle">{self.subtitle}</div>
+            <p>{self.corpus}</p>
+            <div class="article-author">By {self.author}</div>
+        </article>
+        """
+        
     def __str__(self):
         s = ""
         return f"{self.title}\n-----------------\n{self.subtitle}\n-----------------\n{self.corpus}\n-----------------\n{self.author}"
-    
-class ArticleComponent(Component):
-    def __init__(self, anchor_page, x, y, width, height, article_data : Article | None = None, num_cols=1):
-        super().__init__(anchor_page, x, y, width, height)
-        self.data = article_data if article_data else Article()
-        self.num_cols = num_cols
-
-    def render(self):
-        return f"""
-        <div class="article" style="
-            position: absolute; 
-            left: {self.x}px; 
-            top: {self.y}px; 
-            width: {self.width}px; 
-            height: {self.height}px;
-        ">
-            <div class="article-title">{self.data.title}</div>
-            <div class="article-subtitle">{self.data.subtitle}</div>
-            
-            <div class="article-corpus" style="
-                column-count: {self.num_cols}; 
-                height: 100%;
-            ">
-                {self.data.corpus}
-            </div>
-        </div>
-        """
-
 
 if __name__ == '__main__':
     a = Article()

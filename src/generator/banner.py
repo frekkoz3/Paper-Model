@@ -12,6 +12,7 @@ r"""
 """
 import requests
 from src.generator.component import Component
+import random
 
 # consider using also something from 
 # https://people.cs.pitt.edu/~kovashka/ads_workshop/#intro
@@ -30,8 +31,11 @@ from src.generator.component import Component
 class Banner(Component):
 
     def _generate(self):
-        url = f"https://picsum.photos/{self.width}/{self.height}"
-        self.img = requests.get(url)
+        self.img_url = f"https://picsum.photos/{int(self.width)}/{int(self.height)}"
 
     def render(self):
-        pass
+        return f"""
+        <div class="banner">
+            <img src="{self.img_url}" />
+        </div>
+        """

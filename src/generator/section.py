@@ -61,68 +61,120 @@ class Section(Component):
 
     def _generate(self):
         self.generate_columns()
-        self.place_banners()
-        self.generate_articles()
 
-    def generate_columns(self):
-        """
-            Function to generate columns
-        """
-        available_width = self.width
-        min_w = self.anchor.minimum_column_width
-        margin = self.anchor.column_margin
+        self.section_type = random.choice(["main", "standard"])
 
-        max_cols = int(available_width // min_w)
-        
-        n_cols = random.randint(1, max_cols) if max_cols > 1 else 1
+        self.title = None
+        if random.random() < 0.4:   # probability of having a title
+            self.title = {
+                "text": Article().title  # or a dedicated Title class later
+            }
 
-        col_width = (available_width - (n_cols - 1) * margin) / n_cols
+        self.banners = []
+        n_banners = random.choices([0, 1, 2], weights=[1, 3, 1])[0]
 
-        self.columns = []
-        for i in range(n_cols):
-            # x = self.x + i * (col_width + margin)
-            x = i * (col_width + margin)   # relative to section
-            y = 0
-            self.columns.append({
-                "x": x,
-                "y": y,
-                "width": col_width,
-                "height": self.height,
-                "cursor_y": self.y  # where next content goes
+        for _ in range(n_banners):
+            banner = Banner(self.anchor, self.x, self.y, self.width, 150)
+            self.banners.append(banner)
+
+        self.elements = []
+
+        n_articles = random.randint(5, 12)
+
+        for i in range(n_articles):
+            is_main = (self.section_type == "main" and i == 0)
+
+            article = Article()
+
+            self.elements.append({
+                "type": "article",
+                "content": article,
+                "is_main": is_main,
+                "span": len(self.columns) if is_main else 1
             })
 
-    def place_banners(self):
-        # must think about how to determine how many banners to put in a section
-        # and how big each banner should be
-        pass
-        self.n_banners = ...
-        self.banners = ...
+        flow = []
+
+        if self.title:
+            flow.append({
+                "type": "title",
+                "content": self.title["text"]
+            })
+
+        banner_index = 0
+
+        for i, element in enumerate(self.elements):
+            flow.append(element)
+
+            # randomly inject banners between articles
+            if banner_index < len(self.banners) and random.random() < 0.25:
+                flow.append({
+                    "type": "banner",
+                    "content": self.banners[banner_index]
+                })
+                banner_index += 1
+
+        # append remaining banners
+        while banner_index < len(self.banners):
+            flow.append({
+                "type": "banner",
+                "content": self.banners[banner_index]
+            })
+            banner_index += 1
+
+        self.flow = flow
     
-    def generate_articles(self):
-        # must think about how to determine how many article to put in a section 
-        # and how long each article should be
-        pass
-        self.n_articles = ...
-        self.articles = ...
+    def generate_columns(self):
+        self.n_columns = random.choice([2, 3, 4, 5])
+        
+
+    def place_banners(self):
+        self.banners = []
+
+        if random.random() < 0.3:  # 30% chance
+            b = Banner(self.anchor, self.x, self.y, self.width, 150)
+            b._generate()
+            self.banners.append(b)
 
     def render(self):
+
         html = f"""
-        <div class="section" style="
-            left:{self.x}px;
-            top:{self.y}px;
-            width:{self.width}px;
-            height:{self.height}px;">
+        <section class="section"
+            style="--cols:{self.n_columns}; --gap:{self.anchor.column_margin}px;">
+            
+            <div class="section-content">
         """
 
-        for col in self.columns:
-            html += f"""
-            <div class="column" style="
-                left:{col['x']}px;
-                top:{col['y']}px;
-                width:{col['width']}px;
-                height:{col['height']}px;">
-            </div>
-            """
+        for item in self.flow:
 
-        html += "</div>"
+            if item["type"] == "title":
+                html += f"""
+                <div class="section-title">
+                    {item["content"]}
+                </div>
+                """
+
+            elif item["type"] == "article":
+                span = item.get("span", 1)
+                is_main = item.get("is_main", False)
+
+                html += f"""
+                <div class="article-wrapper"
+                    style="--span:{span};">
+                    {item["content"].render(is_main=is_main)}
+                </div>
+                """
+
+            elif item["type"] == "banner":
+                html += f"""
+                <div class="banner-wrapper">
+                    {item["content"].render()}
+                </div>
+                """
+
+        html += """
+            </div>
+        </section>
+        """
+
         return html
