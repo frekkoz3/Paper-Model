@@ -17,7 +17,7 @@
         "height" : [150, 300]
     },
     "footer" : {
-        "height" : [80, 150]
+        "height" : [80, 130]
     },
     "section" : {
         "split probability": 0.75,

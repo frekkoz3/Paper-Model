@@ -19,13 +19,14 @@ body {
 
 /* HEADER */
 .header {
+    height: var(--header-h);
     background: #f5f5f5;
     border-bottom: 2px solid #000;
     font-size: 28px;
     font-weight: bold;
 
     padding: 10px;
-    display: flex;
+
     align-items: center;
     justify-content: center;
 
@@ -34,12 +35,13 @@ body {
 
 /* FOOTER */
 .footer {
+    height: var(--footer-h); 
     background: #f5f5f5;
     border-top: 2px solid #000;
     font-size: 12px;
 
     padding: 10px;
-    display: flex;
+
     align-items: center;
     justify-content: center;
 
@@ -63,7 +65,6 @@ body {
 .section {
     width: 100%;
     box-sizing: border-box;
-
     padding: 10px;
     border: 1px solid #ddd;
     background: white;
