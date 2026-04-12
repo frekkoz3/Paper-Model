@@ -12,7 +12,6 @@ r"""
 """
 import requests
 from src.generator.component import Component
-import random
 
 # consider using also something from 
 # https://people.cs.pitt.edu/~kovashka/ads_workshop/#intro

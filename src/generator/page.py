@@ -109,8 +109,7 @@ class Page:
         <body>
 
         <div class="page"
-            style="--header-h:{header_h}px;
-                --footer-h:{footer_h}px;">
+         style="--page-width:{self.width}px; --page-height:{self.height}px;">
         """
 
         if self.header:

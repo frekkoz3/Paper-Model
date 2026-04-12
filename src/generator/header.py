@@ -30,11 +30,7 @@ class Header(Component):
 
     def render(self):
         return f"""
-        <div class="header"
-            style="--x:{self.x}px;
-                    --y:{self.y}px;
-                    --w:{self.width}px;
-                    --h:{self.height}px;">
+        <div class="header">
             The Daily News — {self.anchor.date.strftime('%B %d, %Y')}
         </div>
         """

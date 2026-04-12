@@ -30,11 +30,7 @@ class Footer(Component):
 
     def render(self):
         return f"""
-        <div class="footer"
-            style="--x:{self.x}px;
-                    --y:{self.y}px;
-                    --w:{self.width}px;
-                    --h:{self.height}px;">
+        <div class="footer">
             Page 1
         </div>
         """

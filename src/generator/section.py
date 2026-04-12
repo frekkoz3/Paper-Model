@@ -137,7 +137,7 @@ class Section(Component):
             self.banners.append(b)
 
     def render(self):
-
+        
         html = f"""
         <section class="section"
             style="--cols:{self.n_columns}; --gap:{self.anchor.column_margin}px;">
