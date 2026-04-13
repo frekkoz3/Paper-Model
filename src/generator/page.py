@@ -27,17 +27,20 @@ class Page:
         section_cfg = config["section"]
         header_cfg = config["header"]
         footer_cfg = config["footer"]
+        banner_cfg = config["banner"]
 
         # PAGE PARAMS
         self.width = page_cfg["width"]
         self.height = page_cfg["height"]
 
-        self.header_probability = page_cfg["header probability"]
-        self.footer_probability = page_cfg["footer probability"]
+        self.header_probability = header_cfg["probability"]
+        self.footer_probability = footer_cfg["probability"]
+        self.banner_probability = banner_cfg["probability"]
 
         self.minimum_column_width = page_cfg["minimum column width"]
         self.minimum_section_height = page_cfg["minimum section height"]
-
+        
+        # These margins are not really used, to think if keeping or not them
         self.upper_margin = min(page_cfg["upper margin"]["max"], max(page_cfg["upper margin"]["min"], random.gauss(mu = page_cfg["upper margin"]["mu"], sigma = page_cfg["upper margin"]["sigma"])))
         self.lower_margin = min(page_cfg["lower margin"]["max"], max(page_cfg["lower margin"]["min"], random.gauss(mu = page_cfg["lower margin"]["mu"], sigma = page_cfg["lower margin"]["sigma"])))
         self.right_margin = min(page_cfg["right margin"]["max"], max(page_cfg["right margin"]["min"], random.gauss(mu = page_cfg["right margin"]["mu"], sigma = page_cfg["right margin"]["sigma"])))
@@ -56,13 +59,16 @@ class Page:
         # FOOTER PARAMS
         self.footer_height_range = footer_cfg["height"]
 
+        # RANDOM FONT
+        self.font = random.choice(page_cfg["fonts"])
+
         self.date = random_datetime()
 
         self.section_space = {
-            "x_min": self.left_margin,
-            "y_min": self.upper_margin,
-            "x_max": self.width - self.right_margin,
-            "y_max": self.height - self.lower_margin
+            "x_min": 0, #self.left_margin,
+            "y_min": 0, #self.upper_margin,
+            "x_max": self.width, # - self.right_margin,
+            "y_max": self.height #- self.lower_margin
         }
 
         self.generate_header()
@@ -84,6 +90,7 @@ class Page:
             self.section_space["y_max"] -= self.footer.height
 
     def generate_sections(self):
+        self.section_space_h = self.section_space["y_max"] - self.section_space["y_min"]
         self.sections = Section(
             self,
             self.section_space["x_min"],
@@ -106,11 +113,12 @@ class Page:
             <link rel="stylesheet" href="/css/styles.css">
         </head>
 
-        <body>
+        <body style="--body-font:{self.font};">
 
         <div class="page"
-         style="--page-width:{self.width}px; --page-height:{self.height}px;"
-         --header-h: {header_h}px; --footer-h: {footer_h}px;>
+         style="--page-width:{self.width}px; --page-height:{self.height}px;
+         --header-h: {header_h}px; --footer-h: {footer_h}px;
+         --section-space-h : {self.section_space_h}px;">
         """
 
         if self.header:

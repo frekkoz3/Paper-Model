@@ -20,7 +20,7 @@ class Article():
     """
 
     def __init__(self):
-        self.fake = Faker()
+        self.fake = Faker(['it_IT', 'en_US', 'ja_JP'])
         self._generate()
 
     def _generate(self):

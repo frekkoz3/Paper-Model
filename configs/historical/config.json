@@ -2,8 +2,6 @@
     "page" : {   
         "width" : 1080,
         "height" : 1920,
-        "header probability" : 1,
-        "footer probability" : 1,
         "minimum column width" : 280, 
         "minimum section height" : 250,
         "upper margin" : {"mu" : 35, "sigma" : 5, "min" : 20, "max" : 50},
@@ -11,18 +9,30 @@
         "right margin" : {"mu" : 25, "sigma" : 5, "min" : 10, "max" : 40}, 
         "left margin" : {"mu" : 25, "sigma" : 5,  "min" : 10, "max" : 40},
         "between section margin" : {"mu" : 20, "sigma" : 5,  "min" : 10, "max" : 30},
-        "column margin" : 10
+        "column margin" : 10,
+        "fonts" : ["MomTypewriter",
+        "ElegantTypewriter",
+        "OldNewspaper",
+        "HouseholdWords",
+        "PunkTypewriter",
+        "ToxTypewriter",
+        "TravellingTypewriter",
+        "CondensedTypewriter"]
     },
     "header" : {
-        "height" : [150, 300]
+        "probability" : 0.3,
+        "height" : [80, 150]
     },
     "footer" : {
-        "height" : [80, 130]
+        "probability" : 0.3,
+        "height" : [30, 80]
     },
     "section" : {
         "split probability": 0.75,
         "recursion limit": 3
     },
-    "banner" : {},
+    "banner" : {
+        "probability" : 0.7
+    },
     "article" : {}
 }

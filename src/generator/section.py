@@ -71,10 +71,11 @@ class Section(Component):
             }
 
         self.banners = []
-        n_banners = random.choices([0, 1, 2], weights=[1, 3, 1])[0]
+
+        n_banners = random.choices([0, 1, 2], weights=[1, 3, 3])[0]
 
         for _ in range(n_banners):
-            banner = Banner(self.anchor, self.x, self.y, self.width, 150)
+            banner = Banner(self.anchor, self.x, self.y, self.width, self.height)
             self.banners.append(banner)
 
         self.elements = []
@@ -125,7 +126,9 @@ class Section(Component):
         self.flow = flow
     
     def generate_columns(self):
-        self.n_columns = random.choice([2, 3, 4, 5])
+        if self.width < 1.2*self.anchor.minimum_column_width : self.n_columns = 1
+        elif self.width < 2.4*self.anchor.minimum_column_width : self.n_columns = 2
+        else : self.n_columns = random.choice([2, 2, 3, 3, 3, 4, 4, 5])
         
 
     def place_banners(self):
@@ -137,34 +140,38 @@ class Section(Component):
             self.banners.append(b)
 
     def render(self):
-        
+        padding = 10
+
         html = f"""
         <section class="section"
-            style="--cols:{self.n_columns}; --gap:{self.anchor.column_margin}px;">
-            
+            style="
+                top: {self.y - self.anchor.section_space["y_min"]}px;
+                left: {self.x}px;
+                width: {self.width}px;
+                height: {self.height}px;
+                --cols:{self.n_columns};
+                --gap:{self.anchor.column_margin}px;
+                --section-padding:{padding}px;">
+            <div class ="section-debug">
             <div class="section-content">
         """
 
         for item in self.flow:
-
             if item["type"] == "title":
                 html += f"""
                 <div class="section-title">
                     {item["content"]}
                 </div>
                 """
-
             elif item["type"] == "article":
                 span = item.get("span", 1)
                 is_main = item.get("is_main", False)
 
                 html += f"""
-                <div class="article-wrapper"
-                    style="--span:{span};">
+                <div class="article-wrapper" style="--span:{span};">
                     {item["content"].render(is_main=is_main)}
                 </div>
                 """
-
             elif item["type"] == "banner":
                 html += f"""
                 <div class="banner-wrapper">
@@ -178,3 +185,4 @@ class Section(Component):
         """
 
         return html
+
