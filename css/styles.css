@@ -151,8 +151,6 @@ body {
     flex-direction: column;
     gap: 5px;
 
-    padding : 10px;
-
     box-sizing: border-box;
 }
 
@@ -169,7 +167,6 @@ body {
     padding : var(--section-padding);
     box-sizing: border-box;
     background: white;
-    padding : 10px;
 }
 
 .section-debug {
@@ -189,8 +186,8 @@ body {
 .section-title {
     font-size: 32px;
     font-weight: bold;
-    margin-bottom: 10px;
     column-span: all;
+    padding : 5px;
 }
 
 /* ARTICLES */
@@ -199,30 +196,32 @@ body {
 }
 
 .article {
-    text-align: justify;
-    margin-bottom: 10px;
+    padding : var(--article-padding);
+    text-align: var(--article-text-alignment);
+    margin-bottom: 0px;
     word-break: break-word;
+    font-size: var(--article-font-size);
 }
 
 .article-main .article-title {
-    font-size: 28px;
+    font-size: var(--article-font-size)*2;
 }
 
 .article-title {
-    font-size: 18px;
+    font-size: var(--article-font-size)*1.5;
     font-weight: bold;
     margin-bottom: 5px;
 }
 
 .article-subtitle {
-    font-size: 14px;
+    font-size: var(--article-font-size)*1.3;
     font-style: italic;
     margin-bottom: 8px;
 }
 
 .article-author {
     margin-top: 8px;
-    font-size: 12px;
+    font-size: var(--article-font-size)*0.8;
     font-weight: bold;
 }
 

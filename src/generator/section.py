@@ -152,7 +152,6 @@ class Section(Component):
                 --cols:{self.n_columns};
                 --gap:{self.anchor.column_margin}px;
                 --section-padding:{padding}px;">
-            <div class ="section-debug">
             <div class="section-content">
         """
 
