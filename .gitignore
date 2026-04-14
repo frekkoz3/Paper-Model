@@ -1,7 +1,6 @@
 #python related
 __pycache__
+
 # venv related
 .venv
 venv
-# debug
-debug.html
