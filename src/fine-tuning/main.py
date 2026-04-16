@@ -53,6 +53,10 @@ if __name__ == '__main__':
     val_lbl_path.mkdir(parents=True, exist_ok=True)
 
     """
+    # this code does not work properly for now 
+    # since there are some problems regarding the server connection
+    # we must try to remove the server 
+    
     img_name = f"debug_"
     img_path = train_img_path / img_name
 
