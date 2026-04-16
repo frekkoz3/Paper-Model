@@ -24,6 +24,8 @@ from playwright.sync_api import sync_playwright
 import os
 import threading
 
+import time
+
 class Page:
 
     def __init__(self, config : str):
@@ -165,20 +167,20 @@ def start_server(directory=".", port=8000):
     thread = threading.Thread(target=httpd.serve_forever, daemon=True)
     thread.start()
 
+    time.sleep(0.5)  # time to start the server
+
     return httpd
 
 def to_jpg(page : Page , url : str = "http://localhost:8000/output/debug.html", o_path : str = "output/debug.jpg"):
 
     page.render()
 
-    start_server()
-
     URL = url
 
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page()
-        page.goto(URL, wait_until="networkidle")
+        page.goto(URL, wait_until="load")
         page.wait_for_function("document.fonts.ready")
         page.add_style_tag(content="""
             html, body {
@@ -189,14 +191,14 @@ def to_jpg(page : Page , url : str = "http://localhost:8000/output/debug.html", 
         page.locator(".page").screenshot(path=o_path, quality=100)
         browser.close()
 
-def generate_random_page(save_jpg : bool = True):
+def generate_random_page(save_jpg : bool = True, url : str = "http://localhost:8000/output/debug.html", o_path : str = "output/debug.jpg"):
     page = Page(r"configs/historical/config.json")
 
     if save_jpg:
 
         server = start_server()
         try:
-            to_jpg(page)
+            to_jpg(page, url = url, o_path = o_path)
         finally:
             server.shutdown()
 

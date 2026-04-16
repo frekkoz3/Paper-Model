@@ -183,4 +183,11 @@ class Section(Component):
         """
 
         return html
-
+    
+    def get_YOLO_annotation(self, class_id = 1):
+        s = super().get_YOLO_annotation(class_id)
+        s+="\n"
+        col_width = self.width / self.n_columns
+        for i in range (self.n_columns):
+            s += f"{class_id + 1} {(self.x + col_width/2 + i*col_width)/self.anchor.width} {(self.y + self.height/2)/self.anchor.height} {col_width/self.anchor.width} {self.height/self.anchor.height}\n"
+        return s

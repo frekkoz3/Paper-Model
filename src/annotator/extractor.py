@@ -26,20 +26,21 @@ class YOLOAnnotator:
     def __init__(self, page : Page):
         self.page = page
 
-    def exctract_YOLOv10_annotations(self):
+    def exctract_YOLO_annotations(self):
         h_annotation = f"{self.page.header.get_YOLO_annotation(class_id=0)}\n" if self.page.header else ""
-        f_annotation = f"{self.page.footer.get_YOLO_annotation(class_id=2)}\n" if self.page.footer else ""
+        f_annotation = f"{self.page.footer.get_YOLO_annotation(class_id=3)}\n" if self.page.footer else ""
         s_annotations = ""
         for section in self.page.sections:
             s_annotations+=f"{section.get_YOLO_annotation(class_id=1)}\n"
-        return "".join([h_annotation, f_annotation, s_annotations])
+        self.annotation = "".join([h_annotation, f_annotation, s_annotations])
+        return self.annotation
 
 if __name__ == '__main__':
 
     page = generate_random_page()
 
     annotator = YOLOAnnotator(page)
-    labels = annotator.exctract_YOLOv10_annotations()
+    labels = annotator.exctract_YOLO_annotations()
     image_path = "output/debug.jpg"
     
     img = cv2.imread(image_path)
