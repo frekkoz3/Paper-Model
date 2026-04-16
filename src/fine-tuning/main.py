@@ -36,7 +36,7 @@ if __name__ == '__main__':
     # Also parallelization of the generation process.
     # And deletion of the artifacts once the training is done.
 
-    model = YOLO("models/doclayout_yolo_docstructbench_imgsz1024.pt")
+    model = YOLO("models/yolo26s.pt") # now only this one work. to understand how to fine tune the doclayout yolo 
 
     base_path = Path("data")
 
@@ -52,34 +52,45 @@ if __name__ == '__main__':
     val_img_path.mkdir(parents=True, exist_ok=True)
     val_lbl_path.mkdir(parents=True, exist_ok=True)
 
+    """
+    img_name = f"debug_"
+    img_path = train_img_path / img_name
+
+    # here generated
+    pages = generate_random_page(save_jpg=True, o_path=str(img_path), n_images=20)
+
     # Train set
-    for i in range(100):
+    for i in range(5):
         img_name = f"debug_{i}.jpg"
         img_path = train_img_path / img_name
 
-        page = generate_random_page(save_jpg=True, o_path=str(img_path)) # this thing must be fixed
-
-        extractor = YOLOAnnotator(page)
+        extractor = YOLOAnnotator(pages[i])
         annotations = extractor.exctract_YOLO_annotations()
 
         label_path = train_lbl_path / f"debug_{i}.txt"
 
         save_yolo_labels(label_path, annotations)
+    
+
+    img_name = f"val_"
+    img_path = val_img_path / img_name
+
+    # here generated
+    pages = generate_random_page(save_jpg=True, o_path=str(img_path), n_images=5)
 
     # Validation Set
-    for i in range(20):
+    for i in range(5):
         img_name = f"val_{i}.jpg"
         img_path = val_img_path / img_name
 
-        page = generate_random_page(save_jpg=True, o_path=str(img_path))
-
-        extractor = YOLOAnnotator(page)
+        extractor = YOLOAnnotator(pages[i])
         annotations = extractor.exctract_YOLO_annotations()
 
         label_path = val_lbl_path / f"val_{i}.txt"
 
         save_yolo_labels(label_path, annotations)
-
+    
+    """
     # Fine tuning
     model.train(
         data="configs/data.yaml",
@@ -89,5 +100,5 @@ if __name__ == '__main__':
         lr0=0.001,
         pretrained=True,
         freeze=10,
-        device=0
+        device='cpu'
     )

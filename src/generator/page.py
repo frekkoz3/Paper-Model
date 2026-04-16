@@ -191,18 +191,39 @@ def to_jpg(page : Page , url : str = "http://localhost:8000/output/debug.html", 
         page.locator(".page").screenshot(path=o_path, quality=100)
         browser.close()
 
-def generate_random_page(save_jpg : bool = True, url : str = "http://localhost:8000/output/debug.html", o_path : str = "output/debug.jpg"):
-    page = Page(r"configs/historical/config.json")
+def generate_random_page(save_jpg: bool = True, url: str = "http://localhost:8000/output/debug.html", o_path: str = "output/debug", n_images: int = 1):
+    """
+    Generates one or more pages.
+    
+    - If save_jpg=True → saves images
+    - o_path is treated as a prefix when n_images > 1
+    """
 
+    pages = []
+
+    server = None
     if save_jpg:
-
         server = start_server()
-        try:
-            to_jpg(page, url = url, o_path = o_path)
-        finally:
+
+    try:
+        for i in range(n_images): # adding the progress bar maybe
+
+            page = Page(r"configs/historical/config.json")
+            pages.append(page)
+
+            if save_jpg:
+                if n_images == 1:
+                    img_path = f"{o_path}.jpg"
+                else:
+                    img_path = f"{o_path}{i}.jpg"
+
+                to_jpg(page, url=url, o_path=img_path)
+
+    finally:
+        if server:
             server.shutdown()
 
-    return page
+    return pages if n_images > 1 else pages[0]
 
 if __name__ == '__main__':
     

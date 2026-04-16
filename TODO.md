@@ -6,3 +6,4 @@
 [ ] Work on the section annotation -> images (columns already done)
 [ ] Place images in between columns ?
 [ ] work on the augmentation
+[ ] Installing Torch with CUDA
