@@ -17,6 +17,46 @@ from src.generator.footer import Footer
 from src.generator.section import Section
 from src.utils import random_datetime
 
+from pathlib import Path
+
+from http.server import SimpleHTTPRequestHandler, HTTPServer
+from playwright.sync_api import sync_playwright
+import os
+import threading
+
+
+def start_server(directory=".", port=8000):
+
+    os.chdir(directory)
+    httpd = HTTPServer(("localhost", port), SimpleHTTPRequestHandler)
+
+    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    thread.start()
+
+    return httpd
+
+def to_jpg(page : Page , url : str = "http://localhost:8000/output/debug.html", o_path : str = "output/debug.jpg"):
+
+    page.render()
+
+    start_server()
+
+    URL = url
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page()
+        page.goto(URL, wait_until="networkidle")
+        page.wait_for_function("document.fonts.ready")
+        page.add_style_tag(content="""
+            html, body {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+        """)
+        page.locator(".page").screenshot(path=o_path, quality=100)
+        browser.close()
+
 class Page:
 
     def __init__(self, config : str):
@@ -106,11 +146,13 @@ class Page:
         header_h = self.header.height if self.header else 0
         footer_h = self.footer.height if self.footer else 0
 
+        css_path = "/css/styles.css"
+
         html = f"""
         <html>
         <head>
             <meta charset="UTF-8">
-            <link rel="stylesheet" href="/css/styles.css">
+            <link rel="stylesheet" href={css_path}>
         </head>
 
         <body style="--body-font:{self.font};">
@@ -148,8 +190,12 @@ class Page:
         with open("output/debug.html", "w", encoding="utf-8") as f:
             f.write(html)
 
-
 if __name__ == '__main__':
-
+    
     page = Page(r"configs/historical/config.json")
-    page.render()
+
+    server = start_server()
+    try:
+        to_jpg(page)
+    finally:
+        server.shutdown()

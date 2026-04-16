@@ -28,14 +28,13 @@ class Section(Component):
     """
 
     def __init__(self, anchor_page, x : float, y : float, width : float, height : float, recursion_index : int = 0):
-        # this could be reframed in such a way that this follows the components protocol
         self.anchor = anchor_page
         self.x = x
         self.y = y
         self.width = width
         self.height = height
         self.recursion_index = recursion_index
-        self.columns = []
+        self.columns = [] # this should be populated with some block or something like this in order to make it useful for the annotation process
 
     def split(self):
         if (

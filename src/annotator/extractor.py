@@ -19,6 +19,7 @@ r"""
 # these should be sufficient since we want to handle patches later on
 
 from src.generator.page import Page
+
 class YOLOv10Annotator:
 
     def __init__(self, page : Page):

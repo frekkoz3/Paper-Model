@@ -40,7 +40,7 @@ class Article():
 
         italic = random.random() < self.probs["italic"]
         font_size = random.randint(8, 20)
-        text_alignment = random.choice(["start", "end", "left", "right", "center", "justify"])
+        text_alignment = "justify" # random.choice(["start", "end", "left", "right", "center", "justify"])
         padding = random.randint(0, 10)
 
         return f"""

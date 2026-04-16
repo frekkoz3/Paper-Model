@@ -31,6 +31,6 @@ class Header(Component):
     def render(self):
         return f"""
         <div class="header">
-            The Daily News — {self.anchor.date.strftime('%B %d, %Y')}
+            <center> The Daily News — {self.anchor.date.strftime('%B %d, %Y')} </center>
         </div>
         """

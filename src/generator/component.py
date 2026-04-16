@@ -27,4 +27,14 @@ class Component:
         pass
 
     def render(self):
+        """
+        Return the html (plus css) needed in order to render the component into the page
+        """
         pass
+
+    def get_YOLO_annotation(self, class_id : int = 0):
+        """
+        YOLO format : class_id center_x center_y width height
+        Return the YOLO annotation format.
+        """
+        return f"{class_id} {(self.x + self.width/2)/self.anchor.width} {(self.y + self.height/2)/self.anchor.height} {self.width/self.anchor.width} {self.height/self.anchor.height}"
