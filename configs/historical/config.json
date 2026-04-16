@@ -20,11 +20,11 @@
         "CondensedTypewriter"]
     },
     "header" : {
-        "probability" : 0.3,
+        "probability" : 1,
         "height" : [80, 150]
     },
     "footer" : {
-        "probability" : 0.3,
+        "probability" : 1,
         "height" : [30, 80]
     },
     "section" : {

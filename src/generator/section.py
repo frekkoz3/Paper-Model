@@ -79,7 +79,7 @@ class Section(Component):
 
         self.elements = []
 
-        n_articles = random.randint(5, 12)
+        n_articles = random.randint(10, 20)
 
         for i in range(n_articles):
             is_main = (self.section_type == "main" and i == 0)

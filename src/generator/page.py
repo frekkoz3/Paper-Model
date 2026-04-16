@@ -24,39 +24,6 @@ from playwright.sync_api import sync_playwright
 import os
 import threading
 
-
-def start_server(directory=".", port=8000):
-
-    os.chdir(directory)
-    httpd = HTTPServer(("localhost", port), SimpleHTTPRequestHandler)
-
-    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
-    thread.start()
-
-    return httpd
-
-def to_jpg(page : Page , url : str = "http://localhost:8000/output/debug.html", o_path : str = "output/debug.jpg"):
-
-    page.render()
-
-    start_server()
-
-    URL = url
-
-    with sync_playwright() as p:
-        browser = p.chromium.launch()
-        page = browser.new_page()
-        page.goto(URL, wait_until="networkidle")
-        page.wait_for_function("document.fonts.ready")
-        page.add_style_tag(content="""
-            html, body {
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-        """)
-        page.locator(".page").screenshot(path=o_path, quality=100)
-        browser.close()
-
 class Page:
 
     def __init__(self, config : str):
@@ -119,14 +86,14 @@ class Page:
         self.header = None
         if random.random() < self.header_probability:
             dy = random.randint(*self.header_height_range)
-            self.header = Header(self, self.left_margin, self.lower_margin, self.width - self.right_margin - self.left_margin, dy)
+            self.header = Header(self, 0, 0, self.width, dy)
             self.section_space["y_min"] += self.header.height
 
     def generate_footer(self):
         self.footer = None
         if random.random() < self.footer_probability:
             dy = random.randint(*self.footer_height_range)
-            self.footer = Footer(self, self.left_margin, self.height - self.lower_margin - dy, self.width - self.right_margin - self.left_margin, dy)
+            self.footer = Footer(self, 0, self.height - dy, self.width, dy)
             self.section_space["y_max"] -= self.footer.height
 
     def generate_sections(self):
@@ -190,12 +157,51 @@ class Page:
         with open("output/debug.html", "w", encoding="utf-8") as f:
             f.write(html)
 
-if __name__ == '__main__':
-    
+def start_server(directory=".", port=8000):
+
+    os.chdir(directory)
+    httpd = HTTPServer(("localhost", port), SimpleHTTPRequestHandler)
+
+    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    thread.start()
+
+    return httpd
+
+def to_jpg(page : Page , url : str = "http://localhost:8000/output/debug.html", o_path : str = "output/debug.jpg"):
+
+    page.render()
+
+    start_server()
+
+    URL = url
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page()
+        page.goto(URL, wait_until="networkidle")
+        page.wait_for_function("document.fonts.ready")
+        page.add_style_tag(content="""
+            html, body {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+        """)
+        page.locator(".page").screenshot(path=o_path, quality=100)
+        browser.close()
+
+def generate_random_page(save_jpg : bool = True):
     page = Page(r"configs/historical/config.json")
 
-    server = start_server()
-    try:
-        to_jpg(page)
-    finally:
-        server.shutdown()
+    if save_jpg:
+
+        server = start_server()
+        try:
+            to_jpg(page)
+        finally:
+            server.shutdown()
+
+    return page
+
+if __name__ == '__main__':
+    
+    generate_random_page()

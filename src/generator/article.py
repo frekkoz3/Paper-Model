@@ -21,7 +21,7 @@ class Article():
 
     def __init__(self, probs : dict = {"title" : 1, "subtitle" : 0.1, "corpus" : 1, "author" : 0.2, "italic" : 0.2}):
         self.probs = probs
-        self.fake = Faker(['it_IT', 'en_US', 'ja_JP'])
+        self.fake = Faker(['it_IT', 'en_US'])
         self._generate()
 
     def _generate(self):
@@ -39,9 +39,9 @@ class Article():
         main_class = "article article-main" if is_main else "article"
 
         italic = random.random() < self.probs["italic"]
-        font_size = random.randint(8, 20)
+        font_size = random.randint(4, 14)
         text_alignment = "justify" # random.choice(["start", "end", "left", "right", "center", "justify"])
-        padding = random.randint(0, 10)
+        padding = random.randint(0, 5)
 
         return f"""
         <article class="{main_class}", 
