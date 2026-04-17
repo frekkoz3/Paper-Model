@@ -52,19 +52,20 @@ if __name__ == '__main__':
     val_img_path.mkdir(parents=True, exist_ok=True)
     val_lbl_path.mkdir(parents=True, exist_ok=True)
 
-    """
     # this code does not work properly for now 
     # since there are some problems regarding the server connection
     # we must try to remove the server 
+
+    train_size = 3
     
     img_name = f"debug_"
     img_path = train_img_path / img_name
 
     # here generated
-    pages = generate_random_page(save_jpg=True, o_path=str(img_path), n_images=20)
+    pages = generate_random_page(save_jpg=True, o_path=str(img_path), n_images=train_size)
 
     # Train set
-    for i in range(5):
+    for i in range(train_size):
         img_name = f"debug_{i}.jpg"
         img_path = train_img_path / img_name
 
@@ -75,15 +76,16 @@ if __name__ == '__main__':
 
         save_yolo_labels(label_path, annotations)
     
+    val_size = 3
 
     img_name = f"val_"
     img_path = val_img_path / img_name
 
     # here generated
-    pages = generate_random_page(save_jpg=True, o_path=str(img_path), n_images=5)
+    pages = generate_random_page(save_jpg=True, o_path=str(img_path), n_images=val_size)
 
     # Validation Set
-    for i in range(5):
+    for i in range(val_size):
         img_name = f"val_{i}.jpg"
         img_path = val_img_path / img_name
 
@@ -94,7 +96,6 @@ if __name__ == '__main__':
 
         save_yolo_labels(label_path, annotations)
     
-    """
     # Fine tuning
     model.train(
         data="configs/data.yaml",

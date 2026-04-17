@@ -7,3 +7,4 @@
 [ ] Place images in between columns ?
 [ ] work on the augmentation
 [ ] Installing Torch with CUDA
+[ ] To write all the README
