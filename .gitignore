@@ -7,3 +7,4 @@ venv
 
 # sbatch
 sbatch_file
+slurm*
