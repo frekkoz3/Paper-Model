@@ -8,3 +8,4 @@
 [ ] work on the augmentation
 [ ] Installing Torch with CUDA
 [ ] To write all the README
+[ ] Fixing annotation for sections

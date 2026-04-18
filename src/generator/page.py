@@ -88,14 +88,14 @@ class Page:
         self.header = None
         if random.random() < self.header_probability:
             dy = random.randint(*self.header_height_range)
-            self.header = Header(self, 0, 0, self.width, dy)
+            self.header = Header(self, 0, 0, self.width, dy, 10)
             self.section_space["y_min"] += self.header.height
 
     def generate_footer(self):
         self.footer = None
         if random.random() < self.footer_probability:
             dy = random.randint(*self.footer_height_range)
-            self.footer = Footer(self, 0, self.height - dy, self.width, dy)
+            self.footer = Footer(self, 0, self.height - dy, self.width, dy, 10)
             self.section_space["y_max"] -= self.footer.height
 
     def generate_sections(self):
@@ -106,7 +106,8 @@ class Page:
             self.section_space["y_min"],
             self.section_space["x_max"] - self.section_space["x_min"],
             self.section_space["y_max"] - self.section_space["y_min"],
-            0
+            padding = 10,
+            recursion_index=0
         ).split()
         for section in self.sections:
             section._generate()
@@ -181,7 +182,7 @@ def to_jpg(page : Page , url : str = "http://localhost:8000/output/debug.html", 
         browser = p.chromium.launch()
         page = browser.new_page()
         page.goto(URL, wait_until="load")
-        page.wait_for_function("document.fonts.ready")
+        page.wait_for_function("document.fonts.ready") # probably this is the culprit
         page.add_style_tag(content="""
             html, body {
                 margin: 0 !important;
@@ -191,7 +192,7 @@ def to_jpg(page : Page , url : str = "http://localhost:8000/output/debug.html", 
         page.locator(".page").screenshot(path=o_path, quality=100)
         browser.close()
 
-def generate_random_page(save_jpg: bool = True, url: str = "http://localhost:8000/output/debug.html", o_path: str = "output/debug", n_images: int = 1):
+def generate_random_page(save_jpg: bool = True, directory : str = ".", port : int = 8000, url_path: str = "output/debug.html", o_path: str = "output/debug", n_images: int = 1):
     """
     Generates one or more pages.
     
@@ -201,9 +202,13 @@ def generate_random_page(save_jpg: bool = True, url: str = "http://localhost:800
 
     pages = []
 
+    directory = directory
+    port = port
+    url = f"http://localhost:{port}/{url_path}"
+
     server = None
     if save_jpg:
-        server = start_server()
+        server = start_server(directory, port)
 
     try:
         for i in range(n_images): # adding the progress bar maybe

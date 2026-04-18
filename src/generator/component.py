@@ -15,12 +15,13 @@ class Component:
         Basic layout component of the article.
     """
     
-    def __init__(self, anchor_page, x, y, width, height):
+    def __init__(self, anchor_page, x, y, width, height, padding):
         self.anchor = anchor_page
         self.x = x
         self.y = y
         self.width = width
         self.height = height
+        self.padding = padding
         self._generate()
 
     def _generate(self):
@@ -37,4 +38,4 @@ class Component:
         YOLO format : class_id center_x center_y width height
         Return the YOLO annotation format.
         """
-        return f"{class_id} {(self.x + self.width/2)/self.anchor.width} {(self.y + self.height/2)/self.anchor.height} {self.width/self.anchor.width} {self.height/self.anchor.height}"
+        return f"{class_id} {(self.x + self.width/2)/self.anchor.width} {(self.y + self.height/2)/self.anchor.height} {(self.width)/self.anchor.width} {(self.height)/self.anchor.height}"

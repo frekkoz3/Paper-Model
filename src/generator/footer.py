@@ -30,7 +30,8 @@ class Footer(Component):
 
     def render(self):
         return f"""
-        <div class="footer">
+        <div class="footer"
+        style="--footer-padding: {self.padding}px;">
             Page 1
         </div>
         """

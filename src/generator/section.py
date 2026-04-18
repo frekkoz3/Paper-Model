@@ -27,12 +27,13 @@ class Section(Component):
         The section could contains banner.
     """
 
-    def __init__(self, anchor_page, x : float, y : float, width : float, height : float, recursion_index : int = 0):
+    def __init__(self, anchor_page, x : float, y : float, width : float, height : float, padding : float, recursion_index : int = 0):
         self.anchor = anchor_page
         self.x = x
         self.y = y
         self.width = width
         self.height = height
+        self.padding = padding
         self.recursion_index = recursion_index
         self.columns = [] # this should be populated with some block or something like this in order to make it useful for the annotation process
 
@@ -64,6 +65,7 @@ class Section(Component):
         self.section_type = random.choice(["main", "standard"])
 
         self.title = None
+        self.title_height = 0
         if random.random() < 0.4:   # probability of having a title
             self.title = {
                 "text": Article().title  # or a dedicated Title class later
@@ -74,7 +76,7 @@ class Section(Component):
         n_banners = random.choices([0, 1, 2], weights=[1, 3, 3])[0]
 
         for _ in range(n_banners):
-            banner = Banner(self.anchor, self.x, self.y, self.width, self.height)
+            banner = Banner(self.anchor, self.x, self.y, self.width, self.height, 5)
             self.banners.append(banner)
 
         self.elements = []
@@ -139,7 +141,6 @@ class Section(Component):
             self.banners.append(b)
 
     def render(self):
-        padding = 10
 
         html = f"""
         <section class="section"
@@ -150,12 +151,12 @@ class Section(Component):
                 height: {self.height}px;
                 --cols:{self.n_columns};
                 --gap:{self.anchor.column_margin}px;
-                --section-padding:{padding}px;">
+                --section-padding:{self.padding}px;">
             <div class="section-content">
         """
-
         for item in self.flow:
             if item["type"] == "title":
+                self.title_height = (len(item["content"]) * 32)/self.width # approxximation
                 html += f"""
                 <div class="section-title">
                     {item["content"]}
@@ -188,6 +189,9 @@ class Section(Component):
         s = super().get_YOLO_annotation(class_id)
         s+="\n"
         col_width = self.width / self.n_columns
+        for item in self.flow:
+            if item["type"] == "title":
+                s += f"{class_id + 1} {self.x + self.width/2} {self.y + self.title_height/2} {self.width} {self.title_height}\n"
         for i in range (self.n_columns):
-            s += f"{class_id + 1} {(self.x + col_width/2 + i*col_width)/self.anchor.width} {(self.y + self.height/2)/self.anchor.height} {col_width/self.anchor.width} {self.height/self.anchor.height}\n"
+            s += f"{class_id + 1} {(self.x + col_width/2 + i*col_width)/self.anchor.width} {(self.y + (self.height-self.title_height)/2)/self.anchor.height} {(col_width)/self.anchor.width} {(self.height-self.title_height)/self.anchor.height}\n"
         return s
