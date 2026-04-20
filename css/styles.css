@@ -52,14 +52,6 @@
   font-style: normal;
 }
 
-/* PUNK TYPEWRITER*/
-@font-face {
-  font-family: "PunkTypewriter";
-  src: url("/fonts/punk_typewriter/Punk Typewriter.otf");
-  font-weight: normal;
-  font-style: normal;
-}
-
 /* TOX TYPEWRITER*/
 @font-face {
   font-family: "ToxTypewriter";
@@ -183,10 +175,11 @@ body {
 .section-content {
     column-count: var(--cols);
     column-gap: var(--gap);
+    column-rule: solid 2px;
 }
 
 .section-title {
-    font-size: 32px;
+    font-size: var(--title-font-size);
     font-weight: bold;
     column-span: all;
     padding : 5px;
@@ -206,7 +199,7 @@ body {
 }
 
 .article-main .article-title {
-    font-size: var(--article-font-size)*2;
+    font-size: var(--article-title-font-size);
 }
 
 .article-title {

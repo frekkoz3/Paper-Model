@@ -66,10 +66,12 @@ class Section(Component):
 
         self.title = None
         self.title_height = 0
+        self.title_font_size = random.randrange(24, 48)
         if random.random() < 0.4:   # probability of having a title
             self.title = {
                 "text": Article().title  # or a dedicated Title class later
             }
+            # self.title_height = len(self.title["text"].split())*(self.title_font_size+5) # how to proxy the height of the title?
 
         self.banners = []
 
@@ -151,7 +153,8 @@ class Section(Component):
                 height: {self.height}px;
                 --cols:{self.n_columns};
                 --gap:{self.anchor.column_margin}px;
-                --section-padding:{self.padding}px;">
+                --section-padding:{self.padding}px;
+                --title-font-size:{self.title_font_size}px;">
             <div class="section-content">
         """
         for item in self.flow:
@@ -186,12 +189,14 @@ class Section(Component):
         return html
     
     def get_YOLO_annotation(self, class_id = 1):
-        s = super().get_YOLO_annotation(class_id)
-        s+="\n"
+        #s = super().get_YOLO_annotation(class_id)
+        #s+="\n"
+        s = ""
         col_width = self.width / self.n_columns
-        for item in self.flow:
-            if item["type"] == "title":
-                s += f"{class_id + 1} {self.x + self.width/2} {self.y + self.title_height/2} {self.width} {self.title_height}\n"
+        # for now no section title are actually taken in account
+        #for item in self.flow:
+        #    if item["type"] == "title":
+        #        s += f"{class_id + 1} {(self.x + self.width/2)/self.anchor.width} {(self.y + self.title_height/2)/self.anchor.height} {(self.width-self.padding)/self.anchor.width} {(self.title_height-self.padding)/self.anchor.height}\n"
         for i in range (self.n_columns):
-            s += f"{class_id + 1} {(self.x + col_width/2 + i*col_width)/self.anchor.width} {(self.y + (self.height-self.title_height)/2)/self.anchor.height} {(col_width)/self.anchor.width} {(self.height-self.title_height)/self.anchor.height}\n"
+            s += f"{class_id + 1} {(self.x + col_width/2 + i*col_width + self.padding/2)/self.anchor.width} {(self.y + (self.height-self.title_height)/2)/self.anchor.height} {(col_width - self.padding)/self.anchor.width} {(self.height-self.title_height - self.padding)/self.anchor.height}\n"
         return s

@@ -65,7 +65,7 @@ if __name__ == '__main__':
             cv2.putText(img, str(int(cls)), (x1, y1 - 5),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
         except Exception as e:
-            print(label)
+            pass
 
     cv2.namedWindow("YOLO visualization", cv2.WINDOW_NORMAL)
     cv2.resizeWindow("YOLO visualization", 800, 600)

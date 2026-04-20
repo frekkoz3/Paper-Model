@@ -40,6 +40,7 @@ class Article():
 
         italic = random.random() < self.probs["italic"]
         font_size = random.randint(4, 14)
+        title_size = random.randint(14, 36)
         text_alignment = "justify" # random.choice(["start", "end", "left", "right", "center", "justify"])
         padding = random.randint(0, 5)
 
@@ -48,6 +49,7 @@ class Article():
         style="
         --article-padding:{padding}px;
         --article-font-size:{font_size}px;
+        --article-title-font-size:{title_size}px;
         --article-text-alignment:{text_alignment};">
             <div class="article-title">{self.title if self.title else ''}</div>
             <div class="article-subtitle">{self.subtitle if self.subtitle else ''}</div>

@@ -10,21 +10,23 @@
         "left margin" : {"mu" : 25, "sigma" : 5,  "min" : 10, "max" : 40},
         "between section margin" : {"mu" : 20, "sigma" : 5,  "min" : 10, "max" : 30},
         "column margin" : 10,
-        "fonts" : ["MomTypewriter",
+        "fonts" : ["Times New Roman",
+        "Georgia",
+        "serif",
+        "MomTypewriter",
         "ElegantTypewriter",
         "OldNewspaper",
         "HouseholdWords",
-        "PunkTypewriter",
         "ToxTypewriter",
         "TravellingTypewriter",
         "CondensedTypewriter"]
     },
     "header" : {
-        "probability" : 1,
+        "probability" : 0,
         "height" : [80, 150]
     },
     "footer" : {
-        "probability" : 1,
+        "probability" : 0,
         "height" : [30, 80]
     },
     "section" : {

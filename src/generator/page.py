@@ -189,10 +189,10 @@ def to_jpg(page : Page , url : str = "http://localhost:8000/output/debug.html", 
                 padding: 0 !important;
             }
         """)
-        page.locator(".page").screenshot(path=o_path, quality=100)
+        page.locator(".page").screenshot(path=o_path, quality=100, scale="device")
         browser.close()
 
-def generate_random_page(save_jpg: bool = True, directory : str = ".", port : int = 8000, url_path: str = "output/debug.html", o_path: str = "output/debug", n_images: int = 1):
+def generate_random_page(save_jpg: bool = True, directory : str = ".", port : int = 8000, page_config_path : str = r"configs/config.json", url_path: str = "output/debug.html", o_path: str = "output/debug", n_images: int = 1):
     """
     Generates one or more pages.
     
@@ -213,7 +213,7 @@ def generate_random_page(save_jpg: bool = True, directory : str = ".", port : in
     try:
         for i in range(n_images): # adding the progress bar maybe
 
-            page = Page(r"configs/historical/config.json")
+            page = Page(config=page_config_path)
             pages.append(page)
 
             if save_jpg:
