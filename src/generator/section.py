@@ -152,7 +152,7 @@ class Section(Component):
                 width: {self.width}px;
                 height: {self.height}px;
                 --cols:{self.n_columns};
-                --gap:{self.anchor.column_margin}px;
+                --gap:{self.anchor.column_gap}px;
                 --section-padding:{self.padding}px;
                 --title-font-size:{self.title_font_size}px;">
             <div class="section-content">

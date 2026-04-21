@@ -41,6 +41,7 @@ class Page:
         # PAGE PARAMS
         self.width = page_cfg["width"]
         self.height = page_cfg["height"]
+        self.scale = page_cfg["scale"] # this is a good way to improve the quality without changin dimensions but works only in some browsers
 
         self.header_probability = header_cfg["probability"]
         self.footer_probability = footer_cfg["probability"]
@@ -55,8 +56,8 @@ class Page:
         self.right_margin = min(page_cfg["right margin"]["max"], max(page_cfg["right margin"]["min"], random.gauss(mu = page_cfg["right margin"]["mu"], sigma = page_cfg["right margin"]["sigma"])))
         self.left_margin = min(page_cfg["left margin"]["max"], max(page_cfg["left margin"]["min"], random.gauss(mu = page_cfg["left margin"]["mu"], sigma = page_cfg["left margin"]["sigma"])))
 
-        self.column_margin = page_cfg["column margin"]
-        self.between_section_margin = page_cfg["between section margin"] # remember this is the parameter for a truncated gaussian
+        self.column_gap = min(page_cfg["column margin"]["max"], max(page_cfg["column margin"]["min"], random.gauss(mu = page_cfg["column margin"]["mu"], sigma = page_cfg["column margin"]["sigma"])))
+        self.between_section_margin = page_cfg["between section margin"] # Not used
 
         # SECTION PARAMS
         self.recursion_limit = section_cfg["recursion limit"]
@@ -125,7 +126,9 @@ class Page:
             <link rel="stylesheet" href={css_path}>
         </head>
 
-        <body style="--body-font:{self.font};">
+        <body style=
+        "--body-font:{self.font};
+        zoom:{self.scale};">
 
         <div class="page"
          style="--page-width:{self.width}px; --page-height:{self.height}px;
@@ -160,6 +163,39 @@ class Page:
         with open("output/debug.html", "w", encoding="utf-8") as f:
             f.write(html)
 
+def get_labels(browser_page, page_width, page_height, o_path : str = "output/debug.txt"):
+    """
+    Id Class as follows: 
+    1. Header
+    2. Section Title
+    3. Column
+    4. Footer
+    """
+    annotations = ""
+
+    possible_divs = [".header", ".section-title", "section", ".footer"]
+    class_ids = [0, 1, 2, 3]
+    
+    for i, div in enumerate(possible_divs):
+
+        divs = browser_page.locator(div)
+
+        for i in range(divs.count()):
+            box = divs.nth(i).bounding_box()
+            box["x"] = box["x"]/page_width
+            box["width"] = box["width"]/page_width
+            box["y"] = box["y"]/page_height
+            box["height"] = box["height"]/page_height
+            if div == ".section":
+                ... # we need to find if it where or not a title
+                # section must always be computed after section-title
+                # if it is present we remove its height from the section
+                # and then we retrieve every column as width / n_columns (- padding if possible)
+            annotations+=f"{i} {box["x"]} {box["y"]} {box["width"]} {box["height"]}\n"
+            
+    with open(o_path, "w") as f:
+        f.write(annotations)
+
 def start_server(directory=".", port=8000):
 
     os.chdir(directory)
@@ -172,7 +208,7 @@ def start_server(directory=".", port=8000):
 
     return httpd
 
-def to_jpg(page : Page , url : str = "http://localhost:8000/output/debug.html", o_path : str = "output/debug.jpg"):
+def to_jpg(page : Page , url : str = "http://localhost:8000/output/debug.html", o_path : str = "output/debug.jpg", save_labels : bool = True):
 
     page.render()
 
@@ -180,16 +216,18 @@ def to_jpg(page : Page , url : str = "http://localhost:8000/output/debug.html", 
 
     with sync_playwright() as p:
         browser = p.chromium.launch()
-        page = browser.new_page()
-        page.goto(URL, wait_until="load")
-        page.wait_for_function("document.fonts.ready") # probably this is the culprit
-        page.add_style_tag(content="""
+        browser_page = browser.new_page()
+        browser_page.goto(URL, wait_until="load")
+        browser_page.wait_for_function("document.fonts.ready") # probably this is the culprit
+        browser_page.add_style_tag(content="""
             html, body {
                 margin: 0 !important;
                 padding: 0 !important;
             }
         """)
-        page.locator(".page").screenshot(path=o_path, quality=100, scale="device")
+        browser_page.locator(".page").screenshot(path=o_path, quality=100, scale="device")
+        if save_labels:
+            get_labels(browser_page, page.width, page.height)
         browser.close()
 
 def generate_random_page(save_jpg: bool = True, directory : str = ".", port : int = 8000, page_config_path : str = r"configs/config.json", url_path: str = "output/debug.html", o_path: str = "output/debug", n_images: int = 1):

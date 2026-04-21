@@ -196,6 +196,7 @@ body {
     margin-bottom: 0px;
     word-break: break-word;
     font-size: var(--article-font-size);
+    overflow:hidden;
 }
 
 .article-main .article-title {

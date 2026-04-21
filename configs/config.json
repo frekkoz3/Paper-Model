@@ -2,6 +2,7 @@
     "page" : {   
         "width" : 1080,
         "height" : 1920,
+        "scale" : 3,
         "minimum column width" : 280, 
         "minimum section height" : 250,
         "upper margin" : {"mu" : 35, "sigma" : 5, "min" : 20, "max" : 50},
@@ -9,7 +10,7 @@
         "right margin" : {"mu" : 25, "sigma" : 5, "min" : 10, "max" : 40}, 
         "left margin" : {"mu" : 25, "sigma" : 5,  "min" : 10, "max" : 40},
         "between section margin" : {"mu" : 20, "sigma" : 5,  "min" : 10, "max" : 30},
-        "column margin" : 10,
+        "column margin" : {"mu" : 8, "sigma" : 5, "min" : 2, "max" : 15},
         "fonts" : ["Times New Roman",
         "Georgia",
         "serif",

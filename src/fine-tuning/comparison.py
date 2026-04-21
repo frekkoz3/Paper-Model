@@ -15,7 +15,7 @@ r"""
 import cv2
 import matplotlib.pyplot as plt
 
-# img_path = "imgs/proof.png" # whole page
+#img_path = "imgs/proof.png" # whole page
 # img_path = "imgs/column_proof.png" # single column
 img_path = "imgs/column_patch_proof.png" # squared patch on a single column
 
