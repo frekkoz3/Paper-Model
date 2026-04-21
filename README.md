@@ -46,24 +46,15 @@ By the way it makes sense to begin with random images and random text.
           └──  config.json
      └── ...
 ├── css/                      # Folder containing dynamic-css files
-     ├── components/          # Folder containing dynamic-css for specific newspaper components
-          └──  ...
-     ├── theme/               # Folder containing dynamic-css for specific newspaper's theme
-          └──  ...
-     ├── layout.css           # Universal css file for every newspaper  
-     └── base.css             # Universal css file for every newspaper
+     └── style.css            # Universal dynamic css file for every newspaper
 ├── fonts/                    # Folder containing fonts divided by type of newspaper
-     ├── historical/          # Folder containing fonts divided by type of text
-          ├── title/          
-               ├── font.ttf
-               └── ...
-          └── ...
+     ├── font_name            # Folder containing fonts divided by type of text
+          └── font.ttf
      └── ...
 ├── src/                      # Folder containing the code base
      ├── article.py           # Article module
      ├── augmenting.py        # Augmenting realness module
      ├── banner.py            # Banner module
-     ├── extractor.py         # Exctrator of YOLOv10 annotation module
      ├── footer.py            # Footer module
      ├── header.py            # Header module
      ├── page.py              # Page module

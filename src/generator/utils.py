@@ -10,25 +10,19 @@ r"""
 
     A simple rule-based model to generate realistical newspapers' pages for the training of the YOLO-Layout model.
 """
-class Component:
-    """
-        Basic layout component of the article.
-    """
-    
-    def __init__(self, anchor_page, x, y, width, height, padding):
-        self.anchor = anchor_page
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.padding = padding
-        self._generate()
+import os
+import time
+import threading
+from http.server import SimpleHTTPRequestHandler, HTTPServer
 
-    def _generate(self):
-        pass
+def start_server(directory=".", port=8000):
 
-    def render(self):
-        """
-        Return the html (plus css) needed in order to render the component into the page
-        """
-        pass
+    os.chdir(directory)
+    httpd = HTTPServer(("localhost", port), SimpleHTTPRequestHandler)
+
+    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    thread.start()
+
+    time.sleep(0.5)  # time to start the server
+
+    return httpd

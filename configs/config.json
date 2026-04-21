@@ -2,7 +2,7 @@
     "page" : {   
         "width" : 1080,
         "height" : 1920,
-        "scale" : 3,
+        "scale" : 1,
         "minimum column width" : 280, 
         "minimum section height" : 250,
         "upper margin" : {"mu" : 35, "sigma" : 5, "min" : 20, "max" : 50},

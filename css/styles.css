@@ -86,14 +86,17 @@
 /*  BODY    */
 body {
     margin: 0;
+    padding: 0;
     background: #e6e6e6;
     font-family: var(--body-font);
 }
 
 .page {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: var(--page-width);
     height: var(--page-height);
-    margin: 20px auto;
     background: white;
     border: 1px solid #ccc;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -157,7 +160,6 @@ body {
 /* SECTIONS */
 .section {
     position: absolute;
-    overflow: hidden;
     padding : var(--section-padding);
     box-sizing: border-box;
     background: white;

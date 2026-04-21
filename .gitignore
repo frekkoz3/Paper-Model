@@ -10,3 +10,10 @@ sbatch_file
 slurm*
 
 *.cache
+
+# data generated
+data/
+
+# fine tuning cache
+data/labels/train.cache
+data/labels/val.cache

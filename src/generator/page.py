@@ -16,19 +16,13 @@ from src.generator.header import Header
 from src.generator.footer import Footer
 from src.generator.section import Section
 from src.utils import random_datetime
+from src.generator.utils import start_server
 
-from pathlib import Path
-
-from http.server import SimpleHTTPRequestHandler, HTTPServer
 from playwright.sync_api import sync_playwright
-import os
-import threading
-
-import time
 
 class Page:
 
-    def __init__(self, config : str):
+    def __init__(self, config : str, html_path : str = "output/debug.html"):
         with open(config, "r") as f:
             config = json.load(f)
 
@@ -84,6 +78,8 @@ class Page:
         self.generate_header()
         self.generate_footer()
         self.generate_sections()
+
+        self.html_path = html_path
 
     def generate_header(self):
         self.header = None
@@ -160,55 +156,110 @@ class Page:
         </html>
         """
 
-        with open("output/debug.html", "w", encoding="utf-8") as f:
+        with open(self.html_path, "w", encoding="utf-8") as f:
             f.write(html)
 
-def get_labels(browser_page, page_width, page_height, o_path : str = "output/debug.txt"):
+def get_labels(browser_page, page_width, page_height, l_path: str = "output/debug.txt"):
     """
-    Id Class as follows: 
-    1. Header
-    2. Section Title
-    3. Column
-    4. Footer
+    Save labels in YOLO format:
+    class_id x_center y_center width height (normalized)
+
+    Class IDs:
+    0 -> Header
+    1 -> Section
+    2 -> Section Title
+    3 -> Column
+    4 -> Footer
     """
+
     annotations = ""
 
-    possible_divs = [".header", ".section-title", "section", ".footer"]
-    class_ids = [0, 1, 2, 3]
-    
-    for i, div in enumerate(possible_divs):
+    possible_divs = [".header", ".section", ".footer"]
+    class_ids = {
+        ".header": 0,
+        ".section": 1,
+        ".footer": 4
+    }
 
+    for div in possible_divs:
         divs = browser_page.locator(div)
 
         for i in range(divs.count()):
-            box = divs.nth(i).bounding_box()
-            box["x"] = box["x"]/page_width
-            box["width"] = box["width"]/page_width
-            box["y"] = box["y"]/page_height
-            box["height"] = box["height"]/page_height
+            element = divs.nth(i)
+            box = element.bounding_box()
+
+            if box is None:
+                continue
+
+            # SECTION LOGIC
             if div == ".section":
-                ... # we need to find if it where or not a title
-                # section must always be computed after section-title
-                # if it is present we remove its height from the section
-                # and then we retrieve every column as width / n_columns (- padding if possible)
-            annotations+=f"{i} {box["x"]} {box["y"]} {box["width"]} {box["height"]}\n"
-            
-    with open(o_path, "w") as f:
+                section = element
+                title_height = 0
+
+                # ---- Section Title ----
+                title = section.locator(".section-title")
+                if title.count() > 0:
+                    title_box = title.first.bounding_box()
+
+                    if title_box:
+                        title_height = title_box["height"]
+
+                        xc = (title_box["x"] + title_box["width"] / 2) / page_width
+                        yc = (title_box["y"] + title_box["height"] / 2) / page_height
+                        w = title_box["width"] / page_width
+                        h = title_box["height"] / page_height
+
+                        annotations += f"2 {xc} {yc} {w} {h}\n"
+
+                # ---- Columns info ----
+                cols_var = section.evaluate("""
+                (el) => getComputedStyle(el).getPropertyValue('--cols')
+                """)
+
+                try:
+                    n_columns = int(cols_var.strip())
+                except:
+                    n_columns = 1
+
+                # ---- Adjusted section (remove title) ----
+                adj_y = box["y"] + title_height
+                adj_h = box["height"] - title_height
+
+                # ---- Section label ----
+                xc = (box["x"] + box["width"] / 2) / page_width
+                yc = (adj_y + adj_h / 2) / page_height
+                w = box["width"] / page_width
+                h = adj_h / page_height
+
+                # annotations += f"1 {xc} {yc} {w} {h}\n" # we do not need it 
+
+                # ---- Columns ----
+                if n_columns > 0:
+                    col_width = (box["width"]) / n_columns
+
+                    for j in range(n_columns):
+                        col_x = box["x"] + j * (col_width)
+
+                        xc = (col_x + col_width / 2) / page_width
+                        yc = (adj_y + adj_h / 2) / page_height
+                        w = col_width / page_width
+                        h = adj_h / page_height
+
+                        annotations += f"3 {xc} {yc} {w} {h}\n"
+
+            # HEADER / FOOTER
+            else:
+                xc = (box["x"] + box["width"] / 2) / page_width
+                yc = (box["y"] + box["height"] / 2) / page_height
+                w = box["width"] / page_width
+                h = box["height"] / page_height
+
+                annotations += f"{class_ids[div]} {xc} {yc} {w} {h}\n"
+
+    with open(l_path, "w") as f:
         f.write(annotations)
 
-def start_server(directory=".", port=8000):
-
-    os.chdir(directory)
-    httpd = HTTPServer(("localhost", port), SimpleHTTPRequestHandler)
-
-    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
-    thread.start()
-
-    time.sleep(0.5)  # time to start the server
-
-    return httpd
-
-def to_jpg(page : Page , url : str = "http://localhost:8000/output/debug.html", o_path : str = "output/debug.jpg", save_labels : bool = True):
+def to_jpg(page : Page , url : str = "http://localhost:8000/output/debug.html", o_path : str = "output/debug.jpg", l_path : str = "output/debug.txt", save_labels : bool = True):
 
     page.render()
 
@@ -221,16 +272,17 @@ def to_jpg(page : Page , url : str = "http://localhost:8000/output/debug.html", 
         browser_page.wait_for_function("document.fonts.ready") # probably this is the culprit
         browser_page.add_style_tag(content="""
             html, body {
-                margin: 0 !important;
-                padding: 0 !important;
+                margin: 0;
+                padding: 0;
             }
         """)
         browser_page.locator(".page").screenshot(path=o_path, quality=100, scale="device")
         if save_labels:
-            get_labels(browser_page, page.width, page.height)
+            get_labels(browser_page=browser_page.locator(".page"), page_width=page.width*page.scale, page_height=page.height*page.scale, l_path=l_path)
         browser.close()
 
-def generate_random_page(save_jpg: bool = True, directory : str = ".", port : int = 8000, page_config_path : str = r"configs/config.json", url_path: str = "output/debug.html", o_path: str = "output/debug", n_images: int = 1):
+# this will become deprecated
+def generate_random_page(save_jpg: bool = True, directory : str = ".", port : int = 8000, page_config_path : str = r"configs/config.json", url_path: str = "output/debug.html", o_path: str = "output/debug", l_path : str = "output/debug.txt", save_labels : bool = True, n_images: int = 1):
     """
     Generates one or more pages.
     
@@ -260,7 +312,7 @@ def generate_random_page(save_jpg: bool = True, directory : str = ".", port : in
                 else:
                     img_path = f"{o_path}{i}.jpg"
 
-                to_jpg(page, url=url, o_path=img_path)
+                to_jpg(page, url=url, o_path=img_path, l_path=l_path, save_labels=True)
 
     finally:
         if server:

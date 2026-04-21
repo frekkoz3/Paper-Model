@@ -83,7 +83,8 @@ class Section(Component):
 
         self.elements = []
 
-        n_articles = random.randint(10, 20)
+
+        n_articles = random.randint(20, 30)
 
         for i in range(n_articles):
             is_main = (self.section_type == "main" and i == 0)
@@ -187,16 +188,3 @@ class Section(Component):
         """
 
         return html
-    
-    def get_YOLO_annotation(self, class_id = 1):
-        #s = super().get_YOLO_annotation(class_id)
-        #s+="\n"
-        s = ""
-        col_width = self.width / self.n_columns
-        # for now no section title are actually taken in account
-        #for item in self.flow:
-        #    if item["type"] == "title":
-        #        s += f"{class_id + 1} {(self.x + self.width/2)/self.anchor.width} {(self.y + self.title_height/2)/self.anchor.height} {(self.width-self.padding)/self.anchor.width} {(self.title_height-self.padding)/self.anchor.height}\n"
-        for i in range (self.n_columns):
-            s += f"{class_id + 1} {(self.x + col_width/2 + i*col_width + self.padding/2)/self.anchor.width} {(self.y + (self.height-self.title_height)/2)/self.anchor.height} {(col_width - self.padding)/self.anchor.width} {(self.height-self.title_height - self.padding)/self.anchor.height}\n"
-        return s
