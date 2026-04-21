@@ -19,7 +19,7 @@ if __name__ == '__main__':
     # This is a simple fine tuning routine for a doclayout-yolo model
     # This is not complete. Augmentation should be included. 
 
-    #model = YOLO("models/yolo26s.pt") # now only this one work. to understand how to fine tune the doclayout yolo 
+    model = YOLO("models/yolo26s.pt") # now only this one work. to understand how to fine tune the doclayout yolo 
 
     train_size = 5
     val_size = 2
