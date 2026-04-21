@@ -11,7 +11,7 @@ r"""
     A simple rule-based model to generate realistical newspapers' pages for the training of the YOLO-Layout model.
 """
 from src.generator.page import Page, to_jpg
-from src.generator.utils import start_server
+from src.utils import start_server
 
 from pathlib import Path
 

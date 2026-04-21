@@ -1,4 +1,4 @@
-"""
+r"""
      _____                        __  __           _      _ 
     |  __ \                      |  \/  |         | |    | |
     | |__) |_ _ _ __   ___ _ __  | \  / | ___   __| | ___| |
@@ -13,7 +13,13 @@
 import random
 from datetime import datetime, timedelta
 
-MIN_YEAR = 1900
+import os
+import time
+import threading
+from http.server import SimpleHTTPRequestHandler, HTTPServer
+import shutil
+
+MIN_YEAR = 1600
 MAX_YEAR = 2026
 
 def random_datetime():
@@ -22,3 +28,23 @@ def random_datetime():
     years = MAX_YEAR - MIN_YEAR + 1
     end = start + timedelta(days=365 * years)
     return start + (end - start) * random.random()
+
+def start_server(directory=".", port=8000):
+
+    os.chdir(directory)
+    httpd = HTTPServer(("localhost", port), SimpleHTTPRequestHandler)
+
+    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    thread.start()
+
+    time.sleep(0.5)  # time to start the server
+
+    return httpd
+
+def clean_folder(folder="data/"):
+
+    for item in os.listdir(folder):
+        item_path = os.path.join(folder, item)
+
+        if os.path.isdir(item_path):
+            shutil.rmtree(item_path)
