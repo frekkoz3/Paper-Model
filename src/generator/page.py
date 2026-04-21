@@ -265,7 +265,7 @@ def to_jpg(page : Page , url : str = "http://localhost:8000/output/debug.html", 
     URL = url
 
     with sync_playwright() as p:
-        browser = p.chromium.launch()
+        browser = p.chromium.launch(headless=True)
         browser_page = browser.new_page()
         browser_page.goto(URL, wait_until="load")
         browser_page.wait_for_function("document.fonts.ready") # probably this is the culprit

@@ -16,13 +16,14 @@ from src.utils import clean_folder # needed if we want to clean the folder after
 
 if __name__ == '__main__':
 
-    # This is a simple fine tuning routine for a doclayout-yolo model
+    # This is a simple fine tuning routine for a yolo26 model
+    # trying the doclayout-yolo model could be good
     # This is not complete. Augmentation should be included. 
 
     model = YOLO("models/yolo26s.pt") # now only this one work. to understand how to fine tune the doclayout yolo 
 
-    train_size = 5
-    val_size = 2
+    train_size = 1000
+    val_size = 100
 
     pages = generate_train_and_validation_set(train_size=train_size, val_size=val_size, img_name="tft")
 
@@ -35,7 +36,10 @@ if __name__ == '__main__':
         lr0=0.001,
         pretrained=True,
         freeze=10,
-        device='cpu'
+        device='cuda'
     )
 
+    model.save("models/first_try_ft_yolo26.pt")
+
+    clean_folder("data/")
     

@@ -1,5 +1,5 @@
 train: ../data/images/train
 val: ../data/images/val
 
-nc: 4
-names: ["header", "section", "column", "footer"]
+nc: 5
+names: ["header", "section", "section_title", "column", "footer"]
