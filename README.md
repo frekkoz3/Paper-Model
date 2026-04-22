@@ -62,3 +62,57 @@ By the way it makes sense to begin with random images and random text.
      └── utils.py             # Utils (such as randomdatetime)
 └── README.md
 ```
+
+## Quick Setup
+
+```bash
+py -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+## Configs
+
+This whole project work based on the config files available in the configs folder.
+
+## Torch with CUDA
+
+The default installation does not install torch with CUDA. We highly recomend to install it if available.
+
+Firstly uninstall the already installed torch and torchvision
+
+```bash
+source .venv/bin/activate
+pip uninstall torch torchvision
+```
+
+and then follow the [official documentation](https://pytorch.org/get-started/locally/).
+
+## Playwright
+
+This code depends from Playwright. The quickest setup possible is:
+
+```bash
+py -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+playwright install chromium
+```
+
+Note that there could be some issues while following this procedure.
+
+If occouring in errors such as:
+
+```bash
+BEWARE: your OS is not officially supported by Playwright; installing dependencies for ubuntu24.04-x64 as a fallback.
+```
+
+Don't be scared. Before thinking everything is messed up, simply try:
+
+```bash
+py -m src.generator.data_gen --trainsize 1 --valsize 1 --verbose 1
+```
+
+If this works, there are no problems then.
