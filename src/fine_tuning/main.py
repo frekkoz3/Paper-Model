@@ -22,11 +22,6 @@ if __name__ == '__main__':
 
     model = YOLO("models/yolo26s.pt") # now only this one work. to understand how to fine tune the doclayout yolo 
 
-    train_size = 1000
-    val_size = 100
-
-    pages = generate_train_and_validation_set(train_size=train_size, val_size=val_size, img_name="tft")
-
     # Fine tuning
     model.train(
         data="configs/data.yaml",
@@ -40,5 +35,3 @@ if __name__ == '__main__':
     )
 
     model.save("models/first_try_ft_yolo26.pt")
-
-    clean_folder("data/")
