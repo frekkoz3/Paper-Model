@@ -33,4 +33,4 @@ if __name__ == "__main__":
     cv2.destroyAllWindows()
 
     # Save result
-    cv2.imwrite("annotated.jpg", annotated)
+    cv2.imwrite("imgs/annotated_proof.jpg", annotated)
