@@ -22,3 +22,6 @@ data/labels/val.cache
 
 # absolute path css
 css/absolute style.css
+
+# yolo
+runs/
