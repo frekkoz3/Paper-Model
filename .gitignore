@@ -5,9 +5,11 @@ __pycache__
 .venv
 venv
 
-# sbatch
+# slurm related
 sbatch_file
+sbatch_*
 slurm*
+logs/
 
 *.cache
 
