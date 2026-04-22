@@ -79,17 +79,11 @@ def generate_train_and_validation_set(
                 page.render()
                 pages.append(page)
 
-                html_file = Path(f"{html_path}_{idx}.html").resolve()
+                html_file = Path(f"{html_path}_{idx}.html").resolve().as_uri()
 
                 browser_page.goto(html_file, wait_until="networkidle")
                 
                 browser_page.wait_for_timeout(200)  # small buffer
-
-                browser_page.evaluate(f"""
-                    const base = document.createElement('base');
-                    base.href = 'file://{root_dir.as_posix()}/';
-                    document.head.prepend(base);
-                """)
 
                 browser_page.locator(".page").screenshot(path=f"{img_path}_{idx}.jpg", quality=100, scale="device")
                 get_labels(browser_page=browser_page.locator(".page"), page_width=page.width*page.scale, page_height=page.height*page.scale, l_path=f"{str(lab_path)}_{idx}.txt")
@@ -113,17 +107,11 @@ def generate_train_and_validation_set(
                 page.render()
                 pages.append(page)
 
-                html_file = Path(f"{html_path}_{idx}.html").resolve()
+                html_file = Path(f"{html_path}_{idx}.html").resolve().as_uri()
 
                 browser_page.goto(html_file, wait_until="networkidle")
                 
                 browser_page.wait_for_timeout(200)  # small buffer
-
-                browser_page.evaluate(f"""
-                    const base = document.createElement('base');
-                    base.href = 'file://{root_dir.as_posix()}/';
-                    document.head.prepend(base);
-                """)
 
                 browser_page.locator(".page").screenshot(path=f"{img_path}_{idx}.jpg", quality=100, scale="device")
                 get_labels(browser_page=browser_page.locator(".page"), page_width=page.width*page.scale, page_height=page.height*page.scale, l_path=f"{str(lab_path)}_{idx}.txt")
