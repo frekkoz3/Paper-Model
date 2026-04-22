@@ -38,7 +38,7 @@ class Page:
         # CSS
         if not Path(page_cfg["css_path"]["absolute"]).exists():
             make_css_urls_absolute(page_cfg["css_path"]["relative"], page_cfg["css_path"]["absolute"], page_cfg["root"])
-            print(f"Created CSS file with absolute path references. You can find it here at {page_cfg["css_path"]["absolute"]}.")
+            print(f"Created CSS file with absolute path references. You can find it here at {page_cfg['css_path']['absolute']}.")
         self.css_path = Path(page_cfg["css_path"]["absolute"]).resolve()
 
         # PAGE PARAMS
