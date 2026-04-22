@@ -19,6 +19,10 @@ from src.utils import random_datetime, start_server
 
 from playwright.sync_api import sync_playwright
 
+from pathlib import Path
+
+from src.utils import make_css_urls_absolute
+
 class Page:
 
     def __init__(self, config : str, html_path : str = "output/debug.html"):
@@ -30,6 +34,12 @@ class Page:
         header_cfg = config["header"]
         footer_cfg = config["footer"]
         banner_cfg = config["banner"]
+
+        # CSS
+        if not Path(page_cfg["css_path"]["absolute"]).exists():
+            make_css_urls_absolute(page_cfg["css_path"]["relative"], page_cfg["css_path"]["absolute"], page_cfg["root"])
+            print(f"Created CSS file with absolute path references. You can find it here at {page_cfg["css_path"]["absolute"]}.")
+        self.css_path = Path(page_cfg["css_path"]["absolute"]).resolve()
 
         # PAGE PARAMS
         self.width = page_cfg["width"]
@@ -112,13 +122,11 @@ class Page:
         header_h = self.header.height if self.header else 0
         footer_h = self.footer.height if self.footer else 0
 
-        css_path = "/css/styles.css"
-
         html = f"""
         <html>
         <head>
             <meta charset="UTF-8">
-            <link rel="stylesheet" href={css_path}>
+            <link rel="stylesheet" href="file:///{self.css_path}">
         </head>
 
         <body style=
@@ -258,6 +266,7 @@ def get_labels(browser_page, page_width, page_height, l_path: str = "output/debu
     with open(l_path, "w") as f:
         f.write(annotations)
 
+# this is deprecated. must be updated with removing the server
 def to_jpg(page : Page , url : str = "http://localhost:8000/output/debug.html", o_path : str = "output/debug.jpg", l_path : str = "output/debug.txt", save_labels : bool = True):
 
     page.render()

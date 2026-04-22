@@ -2,7 +2,7 @@
 /* MOM TYPEWRITER*/
 @font-face {
     font-family: "MomTypewriter";
-    src:url("file:///C:/Users/Utente/Documents/Progetti/Paper Model/fonts/moms_typewriter/Mom.ttf");
+    src:url("/fonts/moms_typewriter/Mom.ttf");
     font-weight: normal;
     font-style: normal;
 }
@@ -11,28 +11,28 @@
 @font-face {
   font-family: "ElegantTypewriter";
   
-  src: url("file:///C:/Users/Utente/Documents/Progetti/Paper Model/fonts/elegant_typewriter/ELEGANT TYPEWRITER Bold.ttf");
+  src: url("/fonts/elegant_typewriter/ELEGANT TYPEWRITER Bold.ttf");
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
   font-family: "ElegantTypewriter";
-  src: url("file:///C:/Users/Utente/Documents/Progetti/Paper Model/fonts/elegant_typewriter/ELEGANT TYPEWRITER Regular.ttf");
+  src: url("/fonts/elegant_typewriter/ELEGANT TYPEWRITER Regular.ttf");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "ElegantTypewriter";
-  src: url("file:///C:/Users/Utente/Documents/Progetti/Paper Model/fonts/elegant_typewriter/ELEGANT TYPEWRITER Italic.ttf");
+  src: url("/fonts/elegant_typewriter/ELEGANT TYPEWRITER Italic.ttf");
   font-weight: normal;
   font-style: italic;
 }
 
 @font-face {
   font-family: "ElegantTypewriter";
-  src: url("file:///C:/Users/Utente/Documents/Progetti/Paper Model/fonts/elegant_typewriter/ELEGANT TYPEWRITER Light.ttf");
+  src: url("/fonts/elegant_typewriter/ELEGANT TYPEWRITER Light.ttf");
   font-weight: lighter;
   font-style: normal;
 }
@@ -40,7 +40,7 @@
 /* OLD NEWS PAPER*/
 @font-face {
   font-family: "OldNewspaper";
-  src: url("file:///C:/Users/Utente/Documents/Progetti/Paper Model/fonts/oldnewspapertypes/OldNewspaperTypes.ttf");
+  src: url("/fonts/oldnewspapertypes/OldNewspaperTypes.ttf");
   font-weight: normal;
   font-style: normal;
 }
@@ -48,7 +48,7 @@
 /* HOUSEHOLD WORDS*/
 @font-face {
   font-family: "HouseholdWords";
-  src: url("file:///C:/Users/Utente/Documents/Progetti/Paper Model/fonts/householdwords/HouseholdWords.ttf");
+  src: url("/fonts/householdwords/HouseholdWords.ttf");
   font-weight: normal;
   font-style: normal;
 }
@@ -56,7 +56,7 @@
 /* TOX TYPEWRITER*/
 @font-face {
   font-family: "ToxTypewriter";
-  src: url("file:///C:/Users/Utente/Documents/Progetti/Paper Model/fonts/tox_typewriter/Tox Typewriter.ttf");
+  src: url("/fonts/tox_typewriter/Tox Typewriter.ttf");
   font-weight: normal;
   font-style: normal;
 }
@@ -64,7 +64,7 @@
 /* TRAVELLING TYPEWRITER*/
 @font-face {
   font-family: "TravellingTypewriter";
-  src: url("file:///C:/Users/Utente/Documents/Progetti/Paper Model/fonts/traveling_typewriter/TravelingTypewriter.ttf");
+  src: url("/fonts/traveling_typewriter/TravelingTypewriter.ttf");
   font-weight: normal;
   font-style: normal;
 }
@@ -72,14 +72,14 @@
 /* CONDENSED TYPEWRITER*/
 @font-face {
   font-family: "CondensedTypewriter";
-  src: url("file:///C:/Users/Utente/Documents/Progetti/Paper Model/fonts/typewriter_condensed/typewcond_bold.otf");
+  src: url("/fonts/typewriter_condensed/typewcond_bold.otf");
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
   font-family: "CondensedTypewriter";
-  src: url("file:///C:/Users/Utente/Documents/Progetti/Paper Model/fonts/typewriter_condensed/typewcond_regular.otf");
+  src: url("/fonts/typewriter_condensed/typewcond_regular.otf");
   font-weight: normal;
   font-style: normal;
 }

@@ -17,3 +17,6 @@ data/
 # fine tuning cache
 data/labels/train.cache
 data/labels/val.cache
+
+# absolute path css
+css/absolute style.css

@@ -42,4 +42,3 @@ if __name__ == '__main__':
     model.save("models/first_try_ft_yolo26.pt")
 
     clean_folder("data/")
-    

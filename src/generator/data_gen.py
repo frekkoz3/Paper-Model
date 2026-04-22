@@ -10,10 +10,14 @@ r"""
 
     A simple rule-based model to generate realistical newspapers' pages for the training of the YOLO-Layout model.
 """
-from src.generator.page import Page, to_jpg
-from src.utils import start_server
+from src.generator.page import Page, get_labels
+from playwright.sync_api import sync_playwright
+
+import argparse
 
 from pathlib import Path
+
+from tqdm import tqdm
 
 def generate_train_and_validation_set(
         train_size : int = 1000,
@@ -21,9 +25,16 @@ def generate_train_and_validation_set(
         base_path : str = "data",
         img_name : str = "debug",
         directory : str = ".",
-        port : int = 8000,
-        page_config_path : str = r"configs/config.json"
+        page_config_path : str = r"configs/config.json",
+        base_index : int = 0,
+        verbose : int = 0
         ):
+    """
+    verbose :
+        - 0 = False (do not show anything)
+        - 1 = True (just using print)
+        - 2 = True with tqdm
+    """
     
     base_path = Path(base_path)
 
@@ -42,40 +53,115 @@ def generate_train_and_validation_set(
     val_lbl_path.mkdir(parents=True, exist_ok=True)
     val_html_path.mkdir(parents=True, exist_ok=True)
 
-    # starting the server 
-    server = start_server(directory, port)
-
     pages = []
+
+    root_dir = Path(directory).resolve()
 
     try:
 
-        img_path = train_img_path / img_name
-        lab_path = train_lbl_path / img_name
-        html_path = train_html_path / img_name
+        with sync_playwright() as p:
 
-        for i in range(train_size):
-            page = Page(config=page_config_path, html_path=f"{html_path}_{i}.html")
-            pages.append(page)
-            url = f"http://localhost:{port}/{html_path}_{i}.html"
-            to_jpg(page, url = url, o_path=f"{str(img_path)}_{i}.jpg", l_path=f"{str(lab_path)}_{i}.txt")
+            browser = p.chromium.launch(headless=True)
+            browser_page = browser.new_page()
 
-        img_name = "val"
+            img_path = train_img_path / img_name
+            lab_path = train_lbl_path / img_name
+            html_path = train_html_path / img_name
 
-        img_path = val_img_path / img_name
-        lab_path = val_lbl_path / img_name
-        html_path = val_html_path / img_name
+            if verbose == 1:
+                print("Starting generating training set")
 
-        for i in range(val_size):
-            page = Page(config=page_config_path, html_path=f"{html_path}_{i}.html")
-            pages.append(page)
-            url = f"http://localhost:{port}/{html_path}_{i}.html"
-            to_jpg(page, url = url, o_path=f"{str(img_path)}_{i}.jpg", l_path=f"{str(lab_path)}_{i}.txt")
+            for i in tqdm(range(train_size), desc="Generating training set", disable=(verbose==0 or verbose == 1)):
 
-    finally:
-        server.shutdown()
+                idx = i + base_index
+
+                page = Page(config=page_config_path, html_path=f"{html_path}_{idx}.html")
+                page.render()
+                pages.append(page)
+
+                html_file = Path(f"{html_path}_{idx}.html").resolve()
+
+                browser_page.goto(html_file, wait_until="networkidle")
+                
+                browser_page.wait_for_timeout(200)  # small buffer
+
+                browser_page.evaluate(f"""
+                    const base = document.createElement('base');
+                    base.href = 'file://{root_dir.as_posix()}/';
+                    document.head.prepend(base);
+                """)
+
+                browser_page.locator(".page").screenshot(path=f"{img_path}_{idx}.jpg", quality=100, scale="device")
+                get_labels(browser_page=browser_page.locator(".page"), page_width=page.width*page.scale, page_height=page.height*page.scale, l_path=f"{str(lab_path)}_{idx}.txt")
+
+            if verbose == 1:
+                print("Finished generating trainig set")
+                print("----------------------------------------")
+                print("Starting generating validation set")
+
+            img_name = "val"
+
+            img_path = val_img_path / img_name
+            lab_path = val_lbl_path / img_name
+            html_path = val_html_path / img_name
+
+            for i in tqdm(range(val_size), desc="Generating validation set", disable=(verbose==0 or verbose == 1)):
+
+                idx = i + base_index
+
+                page = Page(config=page_config_path, html_path=f"{html_path}_{idx}.html")
+                page.render()
+                pages.append(page)
+
+                html_file = Path(f"{html_path}_{idx}.html").resolve()
+
+                browser_page.goto(html_file, wait_until="networkidle")
+                
+                browser_page.wait_for_timeout(200)  # small buffer
+
+                browser_page.evaluate(f"""
+                    const base = document.createElement('base');
+                    base.href = 'file://{root_dir.as_posix()}/';
+                    document.head.prepend(base);
+                """)
+
+                browser_page.locator(".page").screenshot(path=f"{img_path}_{idx}.jpg", quality=100, scale="device")
+                get_labels(browser_page=browser_page.locator(".page"), page_width=page.width*page.scale, page_height=page.height*page.scale, l_path=f"{str(lab_path)}_{idx}.txt")
+
+            browser_page.close()
+
+            if verbose ==  1:
+                print("Finished generating validation set")
+                print("---------------------------")
+
+    except Exception as e:
+        print(e)
+        raise
 
     return pages
 
 if __name__ == '__main__':
 
-    pages = generate_train_and_validation_set(train_size=20, val_size=5)
+    parser = argparse.ArgumentParser(description="Generate dataset (train + val)")
+
+    parser.add_argument("--train_size", type=int, default=10)
+    parser.add_argument("--val_size", type=int, default=1)
+    parser.add_argument("--base_index", type=int, default=0)
+    parser.add_argument("--base_path", type=str, default="data")
+    parser.add_argument("--img_name", type=str, default="debug")
+    parser.add_argument("--directory", type=str, default=".")
+    parser.add_argument("--config", type=str, default="configs/config.json")
+    parser.add_argument("--verbose", type=int, default=2)
+
+    args = parser.parse_args()
+
+    generate_train_and_validation_set(
+        train_size=args.train_size,
+        val_size=args.val_size,
+        base_path=args.base_path,
+        directory=args.directory,
+        img_name=args.img_name,
+        page_config_path=args.config,
+        base_index=args.base_index, 
+        verbose = args.verbose
+    )

@@ -20,7 +20,9 @@
         "HouseholdWords",
         "ToxTypewriter",
         "TravellingTypewriter",
-        "CondensedTypewriter"]
+        "CondensedTypewriter"],
+        "css_path" : {"relative" : "css/relative style.css", "absolute" : "css/absolute style.css"},
+        "root" : "."
     },
     "header" : {
         "probability" : 0,
