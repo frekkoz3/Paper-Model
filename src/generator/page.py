@@ -15,7 +15,7 @@ import random
 from src.generator.header import Header
 from src.generator.footer import Footer
 from src.generator.section import Section
-from src.utils import random_datetime, start_server
+from src.utils import random_datetime
 
 from playwright.sync_api import sync_playwright
 

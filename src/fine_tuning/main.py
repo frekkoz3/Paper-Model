@@ -11,8 +11,6 @@ r"""
     A simple rule-based model to generate realistical newspapers' pages for the training of the YOLO-Layout model.
 """
 from ultralytics import YOLO
-from src.generator.data_gen import generate_train_and_validation_set
-from src.utils import clean_folder # needed if we want to clean the folder after the training
 
 if __name__ == '__main__':
 

@@ -10,7 +10,6 @@ r"""
 
     A simple rule-based model to generate realistical newspapers' pages for the training of the YOLO-Layout model.
 """
-import requests
 from src.generator.component import Component
 
 # consider using also something from 
