@@ -53,10 +53,6 @@ def generate_train_and_validation_set(
     val_lbl_path.mkdir(parents=True, exist_ok=True)
     val_html_path.mkdir(parents=True, exist_ok=True)
 
-    pages = []
-
-    root_dir = Path(directory).resolve()
-
     try:
 
         with sync_playwright() as p:
@@ -77,7 +73,6 @@ def generate_train_and_validation_set(
 
                 page = Page(config=page_config_path, html_path=f"{html_path}_{idx}.html")
                 page.render()
-                pages.append(page)
 
                 html_file = Path(f"{html_path}_{idx}.html").resolve().as_uri()
 
@@ -105,7 +100,6 @@ def generate_train_and_validation_set(
 
                 page = Page(config=page_config_path, html_path=f"{html_path}_{idx}.html")
                 page.render()
-                pages.append(page)
 
                 html_file = Path(f"{html_path}_{idx}.html").resolve().as_uri()
 
@@ -125,8 +119,6 @@ def generate_train_and_validation_set(
     except Exception as e:
         print(e)
         raise
-
-    return pages
 
 if __name__ == '__main__':
 
