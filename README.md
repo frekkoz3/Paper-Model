@@ -112,7 +112,7 @@ BEWARE: your OS is not officially supported by Playwright; installing dependenci
 Don't be scared. Before thinking everything is messed up, simply try:
 
 ```bash
-py -m src.generator.data_gen --trainsize 1 --valsize 1 --verbose 1
+py -m src.generator.data_gen --train_size 1 --val_size 1 --verbose 1
 ```
 
 If this works, there are no problems then.
