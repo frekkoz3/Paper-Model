@@ -35,7 +35,7 @@ class Page:
         footer_cfg = config["footer"]
         banner_cfg = config["banner"]
 
-        # CSS
+        # CSS absolute path handling
         if not Path(page_cfg["css_path"]["absolute"]).exists():
             make_css_urls_absolute(page_cfg["css_path"]["relative"], page_cfg["css_path"]["absolute"], page_cfg["root"])
             print(f"Created CSS file with absolute path references. You can find it here at {page_cfg['css_path']['absolute']}.")
@@ -166,19 +166,54 @@ class Page:
         with open(self.html_path, "w", encoding="utf-8") as f:
             f.write(html)
 
-def get_labels(browser_page, page_width, page_height, l_path: str = "output/debug.txt"):
+def get_labels_from_page(browser_page, page_width, page_height, l_path: str = "output/debug.txt"):
     """
-    Save labels in YOLO format:
-    class_id x_center y_center width height (normalized)
+    Extract object annotations from a rendered HTML page and save them
+    in YOLO format.
 
-    Class IDs:
-    0 -> Header
-    1 -> Section
-    2 -> Section Title
-    3 -> Column
-    4 -> Footer
+    The function scans specific DOM elements (header, section, footer,
+    section titles, and columns) and converts their bounding boxes into
+    normalized YOLO annotations:
+
+        class_id x_center y_center width height
+
+    All coordinates are normalized with respect to the full page size.
+
+    Class mapping:
+        0 -> Header
+        1 -> Section (currently not exported)
+        2 -> Section Title
+        3 -> Column
+        4 -> Footer
+
+    Notes:
+        - Section labels (class 1) are computed but not written to file.
+        - Column count is inferred from the CSS variable `--cols`.
+        - Section titles are excluded from the section bounding box height.
+        - Elements without a bounding box are skipped.
+
+    Parameters
+    ----------
+    browser_page : playwright.sync_api.Locator
+        Playwright locator pointing to the root page element containing
+        the layout (typically ".page").
+    page_width : float
+        Width of the rendered page in pixels.
+    page_height : float
+        Height of the rendered page in pixels.
+    l_path : str, optional
+        Output file path where YOLO annotations will be saved.
+        Default is "output/debug.txt".
+
+    Returns
+    -------
+    None
+        The function writes annotations directly to `l_path`.
+
+    Side Effects
+    ------------
+    - Writes a text file containing YOLO-formatted annotations.
     """
-
     annotations = ""
 
     possible_divs = [".header", ".section", ".footer"]
@@ -266,68 +301,64 @@ def get_labels(browser_page, page_width, page_height, l_path: str = "output/debu
     with open(l_path, "w") as f:
         f.write(annotations)
 
-# this is deprecated. must be updated with removing the server
-def to_jpg(page : Page , url : str = "http://localhost:8000/output/debug.html", o_path : str = "output/debug.jpg", l_path : str = "output/debug.txt", save_labels : bool = True):
+def from_page_to_jpg(page : Page , o_path : str = "output/debug.jpg", l_path : str = "output/debug.txt", save_labes : bool = True):
+    """
+    Render an HTML page, capture a screenshot, and optionally generate
+    corresponding YOLO annotations.
 
+    The function uses Playwright to open the rendered HTML file, capture
+    a screenshot of the ".page" element, and optionally extract layout
+    annotations via `get_labels_from_page`.
+
+    Parameters
+    ----------
+    page : Page
+        Object istance of the class Page (not already rendered).
+    o_path : str, optional
+        Output file path for the screenshot image.
+        Default is "output/debug.jpg".
+    l_path : str, optional
+        Output file path for YOLO annotations.
+        Used only if `save_labes` is True.
+        Default is "output/debug.txt".
+    save_labes : bool, optional
+        Whether to generate and save YOLO annotations.
+        Default is True.
+
+    Returns
+    -------
+    None
+
+    Side Effects
+    ------------
+    - Launches a headless Chromium browser instance.
+    - Saves a screenshot of the page to `o_path`.
+    - Optionally writes annotation labels to `l_path`.
+
+    Notes
+    -----
+    - The page is loaded via a local file URI.
+    - A short timeout is used to ensure rendering stability.
+    - Screenshot is taken from the ".page" DOM element only.
+    """
     page.render()
-
-    URL = url
+    html_path = page.html_path
+    html_file = Path(html_path).resolve().as_uri()
 
     with sync_playwright() as p:
+
         browser = p.chromium.launch(headless=True)
         browser_page = browser.new_page()
-        browser_page.goto(URL, wait_until="load")
-        browser_page.wait_for_function("document.fonts.ready") # probably this is the culprit
-        browser_page.add_style_tag(content="""
-            html, body {
-                margin: 0;
-                padding: 0;
-            }
-        """)
+        browser_page.goto(html_file, wait_until="networkidle")
+        browser_page.wait_for_timeout(200)  # small buffer
         browser_page.locator(".page").screenshot(path=o_path, quality=100, scale="device")
-        if save_labels:
-            get_labels(browser_page=browser_page.locator(".page"), page_width=page.width*page.scale, page_height=page.height*page.scale, l_path=l_path)
+
+        if save_labes:
+            get_labels_from_page(browser_page=browser_page.locator(".page"), page_width=page.width*page.scale, page_height=page.height*page.scale, l_path=l_path)
+
         browser.close()
-
-# this will become deprecated
-def generate_random_page(save_jpg: bool = True, directory : str = ".", port : int = 8000, page_config_path : str = r"configs/config.json", url_path: str = "output/debug.html", o_path: str = "output/debug", l_path : str = "output/debug.txt", save_labels : bool = True, n_images: int = 1):
-    """
-    Generates one or more pages.
-    
-    - If save_jpg=True → saves images
-    - o_path is treated as a prefix when n_images > 1
-    """
-
-    pages = []
-
-    directory = directory
-    port = port
-    url = f"http://localhost:{port}/{url_path}"
-
-    server = None
-    if save_jpg:
-        server = start_server(directory, port)
-
-    try:
-        for i in range(n_images): # adding the progress bar maybe
-
-            page = Page(config=page_config_path)
-            pages.append(page)
-
-            if save_jpg:
-                if n_images == 1:
-                    img_path = f"{o_path}.jpg"
-                else:
-                    img_path = f"{o_path}{i}.jpg"
-
-                to_jpg(page, url=url, o_path=img_path, l_path=l_path, save_labels=True)
-
-    finally:
-        if server:
-            server.shutdown()
-
-    return pages if n_images > 1 else pages[0]
 
 if __name__ == '__main__':
     
-    generate_random_page()
+    page = Page(config="configs/config.json")
+    from_page_to_jpg(page)

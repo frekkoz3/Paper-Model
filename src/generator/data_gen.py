@@ -10,30 +10,88 @@ r"""
 
     A simple rule-based model to generate realistical newspapers' pages for the training of the YOLO-Layout model.
 """
-from src.generator.page import Page, get_labels
+from src.generator.page import Page, get_labels_from_page
 from playwright.sync_api import sync_playwright
 
-import argparse
-
 from pathlib import Path
-
 from tqdm import tqdm
+
+import argparse
 
 def generate_train_and_validation_set(
         train_size : int = 1000,
         val_size : int = 100,
         base_path : str = "data",
         img_name : str = "debug",
-        directory : str = ".",
         page_config_path : str = r"configs/config.json",
         base_index : int = 0,
         verbose : int = 0
         ):
     """
-    verbose :
-        - 0 = False (do not show anything)
-        - 1 = True (just using print)
-        - 2 = True with tqdm
+    Generate a synthetic dataset for YOLO training and validation.
+
+    This function creates HTML pages, renders them in a headless browser,
+    captures screenshots, and produces corresponding YOLO annotation files.
+    The dataset is split into training and validation subsets and stored
+    in a structured directory layout.
+
+    Directory structure created under `base_path`:
+        - images/train, images/val
+        - labels/train, labels/val
+        - html/train, html/val
+
+    Each sample consists of:
+        - An HTML file (rendered layout)
+        - A JPG screenshot of the page
+        - A TXT file with YOLO annotations
+
+    Parameters
+    ----------
+    train_size : int, optional
+        Number of training samples to generate. Default is 1000.
+    val_size : int, optional
+        Number of validation samples to generate. Default is 100.
+    base_path : str, optional
+        Root directory where the dataset will be stored.
+        Subdirectories are created automatically. Default is "data".
+    img_name : str, optional
+        Base name used for generated training images and labels.
+        The final filename is suffixed with an index. Default is "debug".
+    page_config_path : str, optional
+        Path to the JSON configuration file used to generate pages.
+        This is passed to the `Page` constructor. Default is "configs/config.json".
+    base_index : int, optional
+        Starting index for file naming. Useful for dataset continuation
+        or avoiding overwrites. Default is 0.
+    verbose : int, optional
+        Controls logging and progress display:
+            - 0 : no output
+            - 1 : basic print statements
+            - 2 : progress bars using tqdm
+        Default is 0.
+
+    Returns
+    -------
+    None
+
+    Side Effects
+    ------------
+    - Creates directories under `base_path` if they do not exist.
+    - Writes HTML files, JPG images, and YOLO TXT label files to disk.
+    - Launches a headless Chromium browser via Playwright.
+
+    Notes
+    -----
+    - Each page is rendered locally and loaded via a file URI.
+    - A short delay is introduced after page load to ensure stable rendering.
+    - The same browser instance is reused for efficiency.
+    - Validation samples use "val" as the base filename instead of `img_name`.
+
+    Raises
+    ------
+    Exception
+        Propagates any exception encountered during dataset generation
+        after printing the error message.
     """
     
     base_path = Path(base_path)
@@ -81,7 +139,7 @@ def generate_train_and_validation_set(
                 browser_page.wait_for_timeout(200)  # small buffer
 
                 browser_page.locator(".page").screenshot(path=f"{img_path}_{idx}.jpg", quality=100, scale="device")
-                get_labels(browser_page=browser_page.locator(".page"), page_width=page.width*page.scale, page_height=page.height*page.scale, l_path=f"{str(lab_path)}_{idx}.txt")
+                get_labels_from_page(browser_page=browser_page.locator(".page"), page_width=page.width*page.scale, page_height=page.height*page.scale, l_path=f"{str(lab_path)}_{idx}.txt")
 
             if verbose == 1:
                 print("Finished generating trainig set")
@@ -108,7 +166,7 @@ def generate_train_and_validation_set(
                 browser_page.wait_for_timeout(200)  # small buffer
 
                 browser_page.locator(".page").screenshot(path=f"{img_path}_{idx}.jpg", quality=100, scale="device")
-                get_labels(browser_page=browser_page.locator(".page"), page_width=page.width*page.scale, page_height=page.height*page.scale, l_path=f"{str(lab_path)}_{idx}.txt")
+                get_labels_from_page(browser_page=browser_page.locator(".page"), page_width=page.width*page.scale, page_height=page.height*page.scale, l_path=f"{str(lab_path)}_{idx}.txt")
 
             browser_page.close()
 
@@ -129,7 +187,6 @@ if __name__ == '__main__':
     parser.add_argument("--base_index", type=int, default=0)
     parser.add_argument("--base_path", type=str, default="data")
     parser.add_argument("--img_name", type=str, default="debug")
-    parser.add_argument("--directory", type=str, default=".")
     parser.add_argument("--config", type=str, default="configs/config.json")
     parser.add_argument("--verbose", type=int, default=2)
 
@@ -139,7 +196,6 @@ if __name__ == '__main__':
         train_size=args.train_size,
         val_size=args.val_size,
         base_path=args.base_path,
-        directory=args.directory,
         img_name=args.img_name,
         page_config_path=args.config,
         base_index=args.base_index, 

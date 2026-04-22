@@ -14,9 +14,6 @@ import random
 from datetime import datetime, timedelta
 
 import os
-import time
-import threading
-from http.server import SimpleHTTPRequestHandler, HTTPServer
 import shutil
 
 import re
@@ -31,18 +28,6 @@ def random_datetime():
     years = MAX_YEAR - MIN_YEAR + 1
     end = start + timedelta(days=365 * years)
     return start + (end - start) * random.random()
-
-def start_server(directory=".", port=8000):
-
-    os.chdir(directory)
-    httpd = HTTPServer(("localhost", port), SimpleHTTPRequestHandler)
-
-    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
-    thread.start()
-
-    time.sleep(0.5)  # time to start the server
-
-    return httpd
 
 def clean_folder(folder="data/"):
 
