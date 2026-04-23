@@ -27,10 +27,5 @@ if __name__ == "__main__":
     # Get annotated image (boxes + labels drawn)
     annotated = results[0].plot()
 
-    # Show image
-    cv2.imshow("Detections", annotated)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
     # Save result
     cv2.imwrite("imgs/annotated_proof.jpg", annotated)
