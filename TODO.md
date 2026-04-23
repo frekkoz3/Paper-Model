@@ -4,5 +4,5 @@
 [ ] Place images in between columns ?
 [ ] work on the augmentation
 [ ] To write all the README
-
-[ ] Installing Torch with CUDA!!! (do it at lecture with eduroam)
+[ ] Find the DOCLAYOUT fine tuning routine
+[ ] Start doing some ablation vs doclayout and yolo26
