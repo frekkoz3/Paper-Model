@@ -39,5 +39,14 @@
     "banner" : {
         "probability" : 0.7
     },
-    "article" : {}
+    "article" : {
+        "probability" : {
+            "title" : 1,
+            "subtitle" : 0.2,
+            "corpus" : 1,
+            "author" : 0.1,
+            "italic" : 0.2,
+            "dropcap" : 0.4
+        }
+    }
 }

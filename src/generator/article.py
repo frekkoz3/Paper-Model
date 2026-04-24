@@ -19,7 +19,7 @@ class Article():
         Class to generate random articles.
     """
 
-    def __init__(self, probs : dict = {"title" : 1, "subtitle" : 0.1, "corpus" : 1, "author" : 0.2, "italic" : 0.2}):
+    def __init__(self, probs : dict = {"title" : 1, "subtitle" : 0.1, "corpus" : 1, "author" : 0.2, "italic" : 0.2, "dropcap" : 0.2}):
         self.probs = probs
         self.fake = Faker(['it_IT', 'en_US'])
         self._generate()
@@ -39,13 +39,16 @@ class Article():
         main_class = "article article-main" if is_main else "article"
 
         italic = random.random() < self.probs["italic"]
-        font_size = random.randint(4, 14)
-        title_size = random.randint(14, 36)
-        text_alignment = "justify" # random.choice(["start", "end", "left", "right", "center", "justify"])
+        dropcap = 'class = "dropcap"' if random.random() < self.probs["dropcap"] else ''
+        corpus_style = 'p' if not italic else 'i'
+        
+        font_size = random.randint(8, 14)
+        title_size = random.randint(16, 36)
+        text_alignment = random.choice(["start", "justify"])
         padding = random.randint(0, 5)
 
         return f"""
-        <article class="{main_class}", 
+        <article class="{main_class}" 
         style="
         --article-padding:{padding}px;
         --article-font-size:{font_size}px;
@@ -53,7 +56,7 @@ class Article():
         --article-text-alignment:{text_alignment};">
             <div class="article-title">{self.title if self.title else ''}</div>
             <div class="article-subtitle">{self.subtitle if self.subtitle else ''}</div>
-            {'<p>' if not italic else '<i>'}{self.corpus if self.corpus else ''}{'</p>' if not italic else '</i>'}
+            <{corpus_style} {dropcap}>{self.corpus if self.corpus else ''}</{corpus_style}>
             <div class="article-author">{self.author if self.author else ''}</div>
         </article>
         """

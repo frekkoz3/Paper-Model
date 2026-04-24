@@ -25,55 +25,56 @@ from src.utils import make_css_urls_absolute
 
 class Page:
 
-    def __init__(self, config : str, html_path : str = "output/debug.html"):
+    def __init__(self, config : str, html_path : str = "output/debug.html", reset_css : bool = False):
         with open(config, "r") as f:
             config = json.load(f)
 
-        page_cfg = config["page"]
-        section_cfg = config["section"]
-        header_cfg = config["header"]
-        footer_cfg = config["footer"]
-        banner_cfg = config["banner"]
+        self.page_cfg = config["page"]
+        self.section_cfg = config["section"]
+        self.header_cfg = config["header"]
+        self.footer_cfg = config["footer"]
+        self.banner_cfg = config["banner"]
+        self.article_cfg = config["article"]
 
         # CSS absolute path handling
-        if not Path(page_cfg["css_path"]["absolute"]).exists():
-            make_css_urls_absolute(page_cfg["css_path"]["relative"], page_cfg["css_path"]["absolute"], page_cfg["root"])
-            print(f"Created CSS file with absolute path references. You can find it here at {page_cfg['css_path']['absolute']}.")
-        self.css_path = Path(page_cfg["css_path"]["absolute"]).resolve()
+        if not Path(self.page_cfg["css_path"]["absolute"]).exists() or reset_css:
+            make_css_urls_absolute(self.page_cfg["css_path"]["relative"], self.page_cfg["css_path"]["absolute"], self.page_cfg["root"])
+            print(f"Created CSS file with absolute path references. You can find it here at {self.page_cfg['css_path']['absolute']}.")
+        self.css_path = Path(self.page_cfg["css_path"]["absolute"]).resolve()
 
         # PAGE PARAMS
-        self.width = page_cfg["width"]
-        self.height = page_cfg["height"]
-        self.scale = page_cfg["scale"] # this is a good way to improve the quality without changin dimensions but works only in some browsers
+        self.width = self.page_cfg["width"]
+        self.height = self.page_cfg["height"]
+        self.scale = self.page_cfg["scale"] # this is a good way to improve the quality without changin dimensions but works only in some browsers
 
-        self.header_probability = header_cfg["probability"]
-        self.footer_probability = footer_cfg["probability"]
-        self.banner_probability = banner_cfg["probability"]
+        self.header_probability = self.header_cfg["probability"]
+        self.footer_probability = self.footer_cfg["probability"]
+        self.banner_probability = self.banner_cfg["probability"]
 
-        self.minimum_column_width = page_cfg["minimum column width"]
-        self.minimum_section_height = page_cfg["minimum section height"]
+        self.minimum_column_width = self.page_cfg["minimum column width"]
+        self.minimum_section_height = self.page_cfg["minimum section height"]
         
         # These margins are not really used, to think if keeping or not them
-        self.upper_margin = min(page_cfg["upper margin"]["max"], max(page_cfg["upper margin"]["min"], random.gauss(mu = page_cfg["upper margin"]["mu"], sigma = page_cfg["upper margin"]["sigma"])))
-        self.lower_margin = min(page_cfg["lower margin"]["max"], max(page_cfg["lower margin"]["min"], random.gauss(mu = page_cfg["lower margin"]["mu"], sigma = page_cfg["lower margin"]["sigma"])))
-        self.right_margin = min(page_cfg["right margin"]["max"], max(page_cfg["right margin"]["min"], random.gauss(mu = page_cfg["right margin"]["mu"], sigma = page_cfg["right margin"]["sigma"])))
-        self.left_margin = min(page_cfg["left margin"]["max"], max(page_cfg["left margin"]["min"], random.gauss(mu = page_cfg["left margin"]["mu"], sigma = page_cfg["left margin"]["sigma"])))
+        self.upper_margin = min(self.page_cfg["upper margin"]["max"], max(self.page_cfg["upper margin"]["min"], random.gauss(mu = self.page_cfg["upper margin"]["mu"], sigma = self.page_cfg["upper margin"]["sigma"])))
+        self.lower_margin = min(self.page_cfg["lower margin"]["max"], max(self.page_cfg["lower margin"]["min"], random.gauss(mu = self.page_cfg["lower margin"]["mu"], sigma = self.page_cfg["lower margin"]["sigma"])))
+        self.right_margin = min(self.page_cfg["right margin"]["max"], max(self.page_cfg["right margin"]["min"], random.gauss(mu = self.page_cfg["right margin"]["mu"], sigma = self.page_cfg["right margin"]["sigma"])))
+        self.left_margin = min(self.page_cfg["left margin"]["max"], max(self.page_cfg["left margin"]["min"], random.gauss(mu = self.page_cfg["left margin"]["mu"], sigma = self.page_cfg["left margin"]["sigma"])))
 
-        self.column_gap = min(page_cfg["column margin"]["max"], max(page_cfg["column margin"]["min"], random.gauss(mu = page_cfg["column margin"]["mu"], sigma = page_cfg["column margin"]["sigma"])))
-        self.between_section_margin = page_cfg["between section margin"] # Not used
+        self.column_gap = min(self.page_cfg["column margin"]["max"], max(self.page_cfg["column margin"]["min"], random.gauss(mu = self.page_cfg["column margin"]["mu"], sigma = self.page_cfg["column margin"]["sigma"])))
+        self.between_section_margin = self.page_cfg["between section margin"] # Not used
 
         # SECTION PARAMS
-        self.recursion_limit = section_cfg["recursion limit"]
-        self.split_probability = section_cfg["split probability"]
+        self.recursion_limit = self.section_cfg["recursion limit"]
+        self.split_probability = self.section_cfg["split probability"]
 
         # HEADER PARAMS
-        self.header_height_range = header_cfg["height"]
+        self.header_height_range = self.header_cfg["height"]
 
         # FOOTER PARAMS
-        self.footer_height_range = footer_cfg["height"]
+        self.footer_height_range = self.footer_cfg["height"]
 
         # RANDOM FONT
-        self.font = random.choice(page_cfg["fonts"])
+        self.font = random.choice(self.page_cfg["fonts"])
 
         self.date = random_datetime()
 
@@ -301,7 +302,7 @@ def get_labels_from_page(browser_page, page_width, page_height, l_path: str = "o
     with open(l_path, "w") as f:
         f.write(annotations)
 
-def from_page_to_jpg(page : Page , o_path : str = "output/debug.jpg", l_path : str = "output/debug.txt", save_labes : bool = True):
+def from_page_to_jpg(page : Page , o_path : str = "output/debug.jpg", l_path : str = "output/debug.txt", save_labes : bool = True, verbose : bool = False):
     """
     Render an HTML page, capture a screenshot, and optionally generate
     corresponding YOLO annotations.
@@ -347,6 +348,9 @@ def from_page_to_jpg(page : Page , o_path : str = "output/debug.jpg", l_path : s
 
     with sync_playwright() as p:
 
+        if verbose:
+            print("Working...")
+
         browser = p.chromium.launch(headless=True)
         browser_page = browser.new_page()
         browser_page.goto(html_file, wait_until="networkidle")
@@ -358,7 +362,10 @@ def from_page_to_jpg(page : Page , o_path : str = "output/debug.jpg", l_path : s
 
         browser.close()
 
+        if verbose:
+            print(f"Work done. You can find the jpg result in {o_path}, while the txt result in {l_path}.")
+
 if __name__ == '__main__':
     
-    page = Page(config="configs/config.json")
-    from_page_to_jpg(page)
+    page = Page(config="configs/config.json", reset_css=True)
+    from_page_to_jpg(page, verbose=True)

@@ -89,7 +89,7 @@ class Section(Component):
         for i in range(n_articles):
             is_main = (self.section_type == "main" and i == 0)
 
-            article = Article()
+            article = Article(probs=self.anchor.article_cfg["probability"])
 
             self.elements.append({
                 "type": "article",
