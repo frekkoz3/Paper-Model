@@ -274,7 +274,7 @@ def get_labels_from_page(browser_page, page_width, page_height, l_path: str = "o
                 w = box["width"] / page_width
                 h = adj_h / page_height
 
-                # annotations += f"1 {xc} {yc} {w} {h}\n" # we do not need it 
+                annotations += f"1 {xc} {yc} {w} {h}\n" # we do not need it 
 
                 # ---- Columns ----
                 if n_columns > 0:
@@ -289,6 +289,10 @@ def get_labels_from_page(browser_page, page_width, page_height, l_path: str = "o
                         h = adj_h / page_height
 
                         annotations += f"3 {xc} {yc} {w} {h}\n"
+
+                # --- Images ---
+                banners = section.locator(".banner")
+                # to locate the banners
 
             # HEADER / FOOTER
             else:

@@ -18,7 +18,8 @@ if __name__ == "__main__":
     model = YOLO("models/first_try_ft_yolo26.pt") # now only this one work. to understand how to fine tune the doclayout yolo 
 
     # Load image
-    image_path = "imgs/proof.png"
+    image_name = "proof.png"
+    image_path = f"imgs/{image_name}"
     image = cv2.imread(image_path)
 
     # Run inference
@@ -28,4 +29,4 @@ if __name__ == "__main__":
     annotated = results[0].plot()
 
     # Save result
-    cv2.imwrite("imgs/annotated_proof.jpg", annotated)
+    cv2.imwrite(f"imgs/annotated_{image_name}", annotated)
