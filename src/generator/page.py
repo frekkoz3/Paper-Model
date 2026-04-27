@@ -23,6 +23,8 @@ from pathlib import Path
 
 from src.utils import make_css_urls_absolute
 
+from src.augmenter.augment import *
+
 import cv2
 import numpy as np
 
@@ -176,7 +178,7 @@ def get_labels_from_page(browser_page, page_width, page_height, l_path: str = "o
     in YOLO format.
 
     The function scans specific DOM elements (header, section, footer,
-    section titles, and columns) and converts their bounding boxes into
+    section titles, banners and columns) and converts their bounding boxes into
     normalized YOLO annotations:
 
         class_id x_center y_center width height
@@ -432,9 +434,9 @@ def visualize_labels(img_path : str = "output/debug.jpg", l_path : str = "output
 
     cv2.imwrite(o_path, img)
 
-
 if __name__ == '__main__':
     
     page = Page(config="configs/config.json", reset_css=True)
     from_page_to_jpg(page, verbose=True)
+    augment_page()
     visualize_labels()

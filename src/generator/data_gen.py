@@ -12,6 +12,7 @@ r"""
 """
 from src.generator.page import Page, get_labels_from_page
 from playwright.sync_api import sync_playwright
+from src.augmenter.augment import augment_page
 
 from pathlib import Path
 from tqdm import tqdm
@@ -25,6 +26,7 @@ def generate_train_and_validation_set(
         img_name : str = "debug",
         page_config_path : str = r"configs/config.json",
         base_index : int = 0,
+        augment : bool = True,
         verbose : int = 0
         ):
     """
@@ -168,6 +170,9 @@ def generate_train_and_validation_set(
                 browser_page.locator(".page").screenshot(path=f"{img_path}_{idx}.jpg", quality=100, scale="device")
                 get_labels_from_page(browser_page=browser_page.locator(".page"), page_width=page.width*page.scale, page_height=page.height*page.scale, l_path=f"{str(lab_path)}_{idx}.txt")
 
+                if augment:
+                    augment_page(img_path=f"{img_path}_{idx}.jpg", l_path=f"{str(lab_path)}_{idx}.txt")
+                    
             browser_page.close()
 
             if verbose ==  1:
@@ -188,6 +193,7 @@ if __name__ == '__main__':
     parser.add_argument("--base_path", type=str, default="data")
     parser.add_argument("--img_name", type=str, default="debug")
     parser.add_argument("--config", type=str, default="configs/config.json")
+    parser.add_argument("--augment", type=bool, default=True)
     parser.add_argument("--verbose", type=int, default=2)
 
     args = parser.parse_args()
@@ -199,5 +205,6 @@ if __name__ == '__main__':
         img_name=args.img_name,
         page_config_path=args.config,
         base_index=args.base_index, 
+        augment=args.augment,
         verbose = args.verbose
     )
