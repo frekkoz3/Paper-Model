@@ -23,6 +23,9 @@ from pathlib import Path
 
 from src.utils import make_css_urls_absolute
 
+import cv2
+import numpy as np
+
 class Page:
 
     def __init__(self, config : str, html_path : str = "output/debug.html", reset_css : bool = False):
@@ -182,16 +185,11 @@ def get_labels_from_page(browser_page, page_width, page_height, l_path: str = "o
 
     Class mapping:
         0 -> Header
-        1 -> Section (currently not exported)
+        1 -> Section
         2 -> Section Title
         3 -> Column
-        4 -> Footer
-
-    Notes:
-        - Section labels (class 1) are computed but not written to file.
-        - Column count is inferred from the CSS variable `--cols`.
-        - Section titles are excluded from the section bounding box height.
-        - Elements without a bounding box are skipped.
+        4 -> Banner
+        5 -> Footer
 
     Parameters
     ----------
@@ -210,10 +208,6 @@ def get_labels_from_page(browser_page, page_width, page_height, l_path: str = "o
     -------
     None
         The function writes annotations directly to `l_path`.
-
-    Side Effects
-    ------------
-    - Writes a text file containing YOLO-formatted annotations.
     """
     annotations = ""
 
@@ -221,7 +215,7 @@ def get_labels_from_page(browser_page, page_width, page_height, l_path: str = "o
     class_ids = {
         ".header": 0,
         ".section": 1,
-        ".footer": 4
+        ".footer": 5
     }
 
     for div in possible_divs:
@@ -269,12 +263,12 @@ def get_labels_from_page(browser_page, page_width, page_height, l_path: str = "o
                 adj_h = box["height"] - title_height
 
                 # ---- Section label ----
-                xc = (box["x"] + box["width"] / 2) / page_width
-                yc = (adj_y + adj_h / 2) / page_height
-                w = box["width"] / page_width
-                h = adj_h / page_height
+                s_xc = (box["x"] + box["width"] / 2) / page_width
+                s_yc = (adj_y + adj_h / 2) / page_height
+                s_w = box["width"] / page_width
+                s_h = adj_h / page_height
 
-                annotations += f"1 {xc} {yc} {w} {h}\n" # we do not need it 
+                annotations += f"1 {s_xc} {s_yc} {s_w} {s_h}\n"
 
                 # ---- Columns ----
                 if n_columns > 0:
@@ -290,9 +284,29 @@ def get_labels_from_page(browser_page, page_width, page_height, l_path: str = "o
 
                         annotations += f"3 {xc} {yc} {w} {h}\n"
 
-                # --- Images ---
+                # --- Banners ---
                 banners = section.locator(".banner")
-                # to locate the banners
+
+                for i in range(banners.count()):
+
+                    banner = banners.nth(i)
+
+                    banner_box = banner.bounding_box()
+
+                    if banner_box:
+
+                        min_y = (banner_box["y"]) / page_height
+                        if min_y > (s_yc + s_h/2): # completely out of border
+                            continue
+                        else:
+                            max_y = min(((banner_box["y"] + banner_box["height"]) / page_height), (s_yc + s_h/2)) # max_y out of border
+
+                            xc = (banner_box["x"] + banner_box["width"] / 2) / page_width
+                            yc = (max_y + min_y) / 2
+                            w = banner_box["width"] / page_width
+                            h =  max_y - min_y
+
+                            annotations += f"4 {xc} {yc} {w} {h}\n"
 
             # HEADER / FOOTER
             else:
@@ -369,7 +383,58 @@ def from_page_to_jpg(page : Page , o_path : str = "output/debug.jpg", l_path : s
         if verbose:
             print(f"Work done. You can find the jpg result in {o_path}, while the txt result in {l_path}.")
 
+def get_color_from_colormap(class_id, num_classes):
+    value = int(255 * class_id / max(1, num_classes - 1))
+    color = cv2.applyColorMap(
+        np.array([[value]], dtype=np.uint8),
+        cv2.COLORMAP_JET
+    )[0][0]
+    return tuple(int(c) for c in color)
+
+def visualize_labels(img_path : str = "output/debug.jpg", l_path : str = "output/debug.txt", o_path : str = "output/annotated_debug.jpg"):
+    """
+    Visualize labels annotation.
+    Labels are in YOLO notation (class id, x_center, y_center, width, height)
+    """
+    annotations = []
+    with open(l_path, "r") as file:
+        for line in file:
+            line = line.strip()
+            if line:
+                annotations.append(line.split())
+    
+    img = cv2.imread(img_path)
+    if img is None:
+        raise ValueError(f"Could not read image at {img_path}")
+
+    h, w, _ = img.shape
+
+    for ann in annotations:
+        class_id, x_center, y_center, bw, bh = map(float, ann)
+
+        x_center *= w
+        y_center *= h
+        bw *= w
+        bh *= h
+
+        x1 = int(x_center - bw / 2)
+        y1 = int(y_center - bh / 2)
+        x2 = int(x_center + bw / 2)
+        y2 = int(y_center + bh / 2)
+
+        color = get_color_from_colormap(class_id, 6)
+        cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
+
+        # Draw class label
+        label = f"{int(class_id)}"
+        cv2.putText(img, label, (x1, y1 - 5),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
+
+    cv2.imwrite(o_path, img)
+
+
 if __name__ == '__main__':
     
     page = Page(config="configs/config.json", reset_css=True)
     from_page_to_jpg(page, verbose=True)
+    visualize_labels()
