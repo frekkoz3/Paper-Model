@@ -25,11 +25,11 @@
         "root" : "."
     },
     "header" : {
-        "probability" : 1,
+        "probability" : 0.1,
         "height" : [80, 150]
     },
     "footer" : {
-        "probability" : 1,
+        "probability" : 0.2,
         "height" : [30, 80]
     },
     "section" : {
