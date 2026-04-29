@@ -134,7 +134,6 @@ class Section(Component):
         elif self.width < 2.4*self.anchor.minimum_column_width : self.n_columns = 2
         else : self.n_columns = random.choice([2, 2, 3, 3, 3, 4, 4, 5])
         
-
     def place_banners(self):
         self.banners = []
 

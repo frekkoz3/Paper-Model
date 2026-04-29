@@ -100,15 +100,19 @@ class Page:
         self.header = None
         if random.random() < self.header_probability:
             dy = random.randint(*self.header_height_range)
-            self.header = Header(self, 0, 0, self.width, dy, 10)
+            padding = random.randint(10, 20)
+            self.header = Header(self, 0, 0, self.width -2*padding, dy, padding)
             self.section_space["y_min"] += self.header.height
+            self.section_space["y_min"] += 2*self.header.padding
 
     def generate_footer(self):
         self.footer = None
         if random.random() < self.footer_probability:
             dy = random.randint(*self.footer_height_range)
-            self.footer = Footer(self, 0, self.height - dy, self.width, dy, 10)
+            padding = random.randint(10, 20)
+            self.footer = Footer(self, 0, self.height - dy, self.width -2*padding, dy, padding)
             self.section_space["y_max"] -= self.footer.height
+            self.section_space["y_max"] -= 2*self.footer.padding
 
     def generate_sections(self):
         self.section_space_h = self.section_space["y_max"] - self.section_space["y_min"]
@@ -128,6 +132,8 @@ class Page:
         header_h = self.header.height if self.header else 0
         footer_h = self.footer.height if self.footer else 0
 
+        
+
         html = f"""
         <html>
         <head>
@@ -141,7 +147,6 @@ class Page:
 
         <div class="page"
          style="--page-width:{self.width}px; --page-height:{self.height}px;
-         --header-h: {header_h}px; --footer-h: {footer_h}px;
          --section-space-h : {self.section_space_h}px;">
         """
 
