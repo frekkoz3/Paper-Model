@@ -143,6 +143,9 @@ def generate_train_and_validation_set(
                 browser_page.locator(".page").screenshot(path=f"{img_path}_{idx}.jpg", quality=100, scale="device")
                 get_labels_from_page(browser_page=browser_page.locator(".page"), page_width=page.width*page.scale, page_height=page.height*page.scale, l_path=f"{str(lab_path)}_{idx}.txt")
 
+                if augment:
+                    augment_page(img_path=f"{img_path}_{idx}.jpg", l_path=f"{str(lab_path)}_{idx}.txt")
+                    
             if verbose == 1:
                 print("Finished generating trainig set")
                 print("----------------------------------------")
