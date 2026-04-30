@@ -30,7 +30,7 @@
         "upper probability" : 0.8,
         "lower probability" : 0.8,
         "subtitle" : 0.7,
-        "logo probability" : 0
+        "logo probability" : 0.87
     },
     "footer" : {
         "probability" : 1,
