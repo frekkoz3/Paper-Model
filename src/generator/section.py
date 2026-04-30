@@ -71,18 +71,16 @@ class Section(Component):
             self.title = {
                 "text": Article().title  # or a dedicated Title class later
             }
-            # self.title_height = len(self.title["text"].split())*(self.title_font_size+5) # how to proxy the height of the title?
 
         self.banners = []
 
-        n_banners = random.choices([0, 1, 2], weights=[1, 3, 3])[0]
+        n_banners = random.choices(self.anchor.banner_cfg["probability"][0], weights = self.anchor.banner_cfg["probability"][1])[0]
 
         for _ in range(n_banners):
             banner = Banner(self.anchor, self.x, self.y, self.width, self.height, 5)
             self.banners.append(banner)
 
         self.elements = []
-
 
         n_articles = random.randint(20, 30)
 

@@ -98,9 +98,7 @@ body {
     width: var(--page-width);
     height: var(--page-height);
     background: white;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
     box-sizing: border-box;
-
     display: flex;
     flex-direction: column;
 }
@@ -143,7 +141,13 @@ hr {
 .line {
   height: 1px;
   background-color: black;
-  width: 95%;
+  width: 100%;
+}
+
+.bur {
+  font-size : 6px;
+  margin: 3px;
+  text-align: var(--burocratic-text-alignment);
 }
 
 .date {
@@ -254,6 +258,18 @@ hr {
 .banner {
     break-inside: avoid;
     margin: 10px 0;
+
+    border: var(--banner-border-size) solid black; 
+    padding: 5px;
+
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.banner .description {
+    font-size: var(--banner-font-size);
+    text-align: var(--banner-text-alignment);
+    margin-top: 5px;
 }
 
 /* VISUAL ELEMENTS */

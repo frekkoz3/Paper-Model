@@ -10,8 +10,10 @@ r"""
 
     A simple rule-based model to generate realistical newspapers' pages for the training of the YOLO-Layout model.
 """
-import random
 from src.generator.component import Component
+
+from faker import Faker
+import random
 
 class Footer(Component):
 
@@ -26,15 +28,21 @@ class Footer(Component):
         - legal/burocratic little text
         - page number
         """
-        pass
+        fake = Faker()
+        self.footer_text = fake.sentence(nb_words = 2)
+        self.burocratic_text = fake.sentence(nb_words = 40, variable_nb_words=True)
 
     def render(self):
+        burocratic = random.random() < self.anchor.footer_cfg["burocratic text prob"]
+        bur_text_alignment = random.choice(["center", "left", "right", "justify"])
         return f"""
         <div class="footer"
         style="--footer-padding: {self.padding}px;
             --footer-h:{self.height}px;
-            --footer-w:{self.width}px;">
+            --footer-w:{self.width}px;
+            --burocratic-text-alignment:{bur_text_alignment};">
             <div class="line"></div>
-            Page 1
+            {self.footer_text}
+            <div class="bur">{self.burocratic_text if burocratic else ''}</div>
         </div>
         """

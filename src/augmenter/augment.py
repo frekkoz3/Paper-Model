@@ -14,7 +14,7 @@ import cv2
 import numpy as np
 import random
 
-def ink_flip(img, threshold=245, p=0.1):
+def ink_flip(img, threshold=100, p=0.1):
     mask = (img < threshold).any(axis=2)
 
     # Generate flip mask (same spatial size)
@@ -24,7 +24,7 @@ def ink_flip(img, threshold=245, p=0.1):
     combined_mask = mask & flip
 
     noisy_img = img.copy()
-    noisy_img[combined_mask] = 255
+    noisy_img[combined_mask] = 255 # just put to white
 
     return noisy_img
 

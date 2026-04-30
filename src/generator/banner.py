@@ -26,14 +26,55 @@ from src.generator.component import Component
 # banner could also been just simple symbols within a black-bordered box
 # and some text within it (old one especially)
 
+import polars as pl
+from faker import Faker
+import random
+
 class Banner(Component):
 
     def _generate(self):
-        self.img_url = f"https://picsum.photos/{int(self.width)}/{int(self.height)}"
+        self.img_url = f"https://picsum.photos/{int(self.width)}/{int(self.height)}?random"
 
     def render(self):
+        font_size = random.randint(5, 12)
+
+        fake = Faker()
+        description = fake.sentence(nb_words=5, variable_nb_words=True)
+
+        border_size = random.choice([0, 2, 4])
+        text_alignment = random.choice(["left", "right"])
+
+        show_description = ( random.random() < self.anchor.banner_cfg["description probability"] )
+
+        description_html = (
+            f'<div class="description">{description}</div>'
+            if show_description else ""
+        )
+
         return f"""
-        <div class="banner">
+        <div class="banner"
+            style="
+                --banner-font-size:{font_size}px;
+                --banner-border-size:{border_size}px;
+                --banner-text-alignment:{text_alignment};
+            ">
             <img src="{self.img_url}" />
+            {description_html}
         </div>
         """
+
+if __name__ == '__main__':
+
+    # this does not work for now, waiting the response from the guys of the AdImageNet
+    try:
+        with open("configs/hf_token.txt", "r") as f:
+            hf_token = f.read()
+    except Exception as e:
+        print(e)
+        print("Check the README in the configs folder")
+
+    df = pl.read_parquet('hf://datasets/PeterBrendan/AdImageNet/data/train-*.parquet', 
+                         storage_options={"token": hf_token})
+    
+    print(df.head())
+

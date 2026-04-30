@@ -25,3 +25,6 @@ css/absolute style.css
 
 # yolo
 runs/
+
+# hugging face token
+hf_token.txt
