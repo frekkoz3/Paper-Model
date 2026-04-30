@@ -109,10 +109,39 @@ body {
     width : var(--header-w);
     padding : var(--header-padding);
     font-size: var(--header-font-size);
-    font-weight: bold;
     align-items: center;
     justify-content: center;
+    text-align:center;
     flex: 0 0 auto;
+    flex-direction: column;
+}
+
+.masthead {
+    width: 100%;
+    gap: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title-group {
+    text-align: center;
+    font-family: var(--header-font-family);
+}
+
+.newspaper-title{
+    font-size: var(--header-title-font-size);
+    font-weight: bold;
+}
+
+.newspaper-subtitle{
+    font-size: var(--header-subtitle-font-size);
+}
+
+.logo {
+    flex: 10 0 auto;
+    width: var(--logo-side);
+    height: var(--logo-side);
 }
 
 /* FOOTER */
@@ -127,17 +156,11 @@ body {
 }
 
 /* Horizontal Ornamental Upper Line*/
-hr {
-  border: none;
-  height: var(--hr-height);
-  width : 95%;
-  background: linear-gradient(to right, transparent, black, transparent);
-}
-
 .line {
   height: 1px;
   background-color: black;
   width: 100%;
+  margin: 1px;
 }
 
 .bur {

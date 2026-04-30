@@ -25,8 +25,12 @@
         "root" : "."
     },
     "header" : {
-        "probability" : 0.1,
-        "height" : [80, 150]
+        "probability" : 1,
+        "height" : [80, 150],
+        "upper probability" : 0.8,
+        "lower probability" : 0.8,
+        "subtitle" : 0.7,
+        "logo probability" : 0
     },
     "footer" : {
         "probability" : 1,
