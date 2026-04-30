@@ -110,10 +110,8 @@ body {
     padding : var(--header-padding);
     font-size: var(--header-font-size);
     font-weight: bold;
-
     align-items: center;
     justify-content: center;
-
     flex: 0 0 auto;
 }
 
@@ -123,10 +121,8 @@ body {
     width : var(--footer-w);
     padding : var(--footer-padding);
     font-size: var(--footer-font-size);
-
     align-items: center;
     justify-content: center;
-
     flex: 0 0 auto;
 }
 
@@ -157,16 +153,13 @@ hr {
 /* CONTENT AREA */
 .content {
     position: relative;
-
     height: var(--section-space-h); 
     width : var(--page-width);
     flex : 1;
     overflow: hidden;
-
     display: flex;
     flex-direction: column;
     gap: 5px;
-
     box-sizing: border-box;
 }
 
@@ -257,10 +250,8 @@ hr {
 
 .banner {
     break-inside: avoid;
-
     border: var(--banner-border-size) solid black; 
     overflow: hidden;
-
     box-sizing: border-box;
 }
 
