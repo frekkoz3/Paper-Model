@@ -35,9 +35,11 @@ class Footer(Component):
     def render(self):
         burocratic = random.random() < self.anchor.footer_cfg["burocratic text prob"]
         bur_text_alignment = random.choice(["center", "left", "right", "justify"])
+        font_size = random.randint(8, 16)
         return f"""
         <div class="footer"
-        style="--footer-padding: {self.padding}px;
+        style="--footer-padding:{self.padding}px;
+            --footer-font-size:{font_size}px;
             --footer-h:{self.height}px;
             --footer-w:{self.width}px;
             --burocratic-text-alignment:{bur_text_alignment};">

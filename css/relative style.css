@@ -122,7 +122,7 @@ body {
     height: var(--footer-h); 
     width : var(--footer-w);
     padding : var(--footer-padding);
-    font-size: 12px;
+    font-size: var(--footer-font-size);
 
     align-items: center;
     justify-content: center;
@@ -257,12 +257,10 @@ hr {
 
 .banner {
     break-inside: avoid;
-    margin: 10px 0;
 
     border: var(--banner-border-size) solid black; 
-    padding: 5px;
-
     overflow: hidden;
+
     box-sizing: border-box;
 }
 

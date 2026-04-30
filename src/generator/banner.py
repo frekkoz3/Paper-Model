@@ -61,6 +61,7 @@ class Banner(Component):
             <img src="{self.img_url}" />
             {description_html}
         </div>
+        
         """
 
 if __name__ == '__main__':
