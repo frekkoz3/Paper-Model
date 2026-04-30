@@ -240,6 +240,13 @@ hr {
     font-weight: bold;
 }
 
+.separation-line {
+   height : 1px;
+   background-color: var(--line-color);
+   width: var(--line-width);
+   margin : 5px auto;
+}
+
 /* BANNER */
 .banner img {
     width: 100%;

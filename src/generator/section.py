@@ -155,6 +155,21 @@ class Section(Component):
                 --title-font-size:{self.title_font_size}px;">
             <div class="section-content">
         """
+        def random_separator(p):
+            if random.random() < p:
+                width = random.randint(50, 95)
+                r = max(0, random.randint(-510, 255))
+                g = max(0, random.randint(-510, 255))
+                b = max(0, random.randint(-510, 255))
+                return f"""
+                <div class="separation-line",
+                style="--line-width:{width}%;
+                        --line-color:rgb({r} {g} {b});"> 
+                </div>
+                """
+            return ""
+
+
         for item in self.flow:
             if item["type"] == "title":
                 self.title_height = (len(item["content"]) * 32)/self.width # approxximation
@@ -178,6 +193,7 @@ class Section(Component):
                     {item["content"].render()}
                 </div>
                 """
+            html += random_separator(self.anchor.article_cfg["probability"]["separator"])
 
         html += """
             </div>

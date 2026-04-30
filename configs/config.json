@@ -49,7 +49,8 @@
             "corpus" : 1,
             "author" : 0.1,
             "italic" : 0.2,
-            "dropcap" : 0.4
+            "dropcap" : 0.4,
+            "separator" : 0.5
         }
     }
 }
