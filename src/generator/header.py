@@ -11,6 +11,7 @@ r"""
     A simple rule-based model to generate realistical newspapers' pages for the training of the YOLO-Layout model.
 """
 from src.generator.component import Component
+from src.generator.utils import random_logo
 from faker import Faker
 import random
 
@@ -35,7 +36,6 @@ class Header(Component):
         self.price = f"{round(random.random(), 1)}0 {random.choice(["£", "$", "¥", "€"])}"
         self.date_type = random.choice(['center', 'top-right', 'bottom-right', 'none'])
         
-        
 
     def render(self):
 
@@ -47,11 +47,19 @@ class Header(Component):
 
         # Upper section
         upper_lines = ['<div class="line"></div>' for _ in range (random.randint(1, 3))]
+        elements = [self.price, random.randint(18908, 37827), self.date]
+        divider = random.choice(["•", "-", "*"])
+        random.shuffle(elements)
         div_top = ""
         if random.random() < self.anchor.header_cfg["upper probability"]:
             div_top = f"""
-                <div class="header-top">
-                {self.price} • {random.randint(18908, 37827)} • {self.date}
+                <div class="header-top", 
+                style="word-spacing:{random.randint(2, 5)}px;">
+                {elements[0]}
+                {divider}
+                {elements[1]}
+                {divider}
+                {elements[2]}
                 {''.join(upper_lines) if upper_lines else ''}
             </div>
             """
@@ -61,17 +69,18 @@ class Header(Component):
         div_bottom = ""
         if random.random() < self.anchor.header_cfg["lower probability"]:
             div_bottom = f"""{''.join(lower_lines) if lower_lines else ''}"""
-
+        
         # Logo -> THIS MUST BE IMPLEMENTED -> could be a subclass of banner
         # look at this https://github.com/msn199959/Logo-2k-plus-Dataset
+        logo_side = random.randint(30, 60)
         logo_sx = f"""
             <div class="logo left">
-            {"***" if random.random() < self.anchor.header_cfg["logo probability"] else ""}
+            {random_logo(logo_side) if random.random() < self.anchor.header_cfg["logo probability"] else ""}
             </div>
         """
         logo_dx = f"""
             <div class="logo right">
-            {"***" if random.random() < self.anchor.header_cfg["logo probability"] else ""}
+            {random_logo(logo_side) if random.random() < self.anchor.header_cfg["logo probability"] else ""}
             </div>
         """
 

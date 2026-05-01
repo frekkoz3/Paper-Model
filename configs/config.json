@@ -25,17 +25,17 @@
         "root" : "."
     },
     "header" : {
-        "probability" : 1,
+        "probability" : 0.1,
         "height" : [80, 150],
-        "upper probability" : 0.8,
-        "lower probability" : 0.8,
-        "subtitle" : 0.7,
-        "logo probability" : 0.87
+        "upper probability" : 0.6,
+        "lower probability" : 0.6,
+        "subtitle" : 0.6,
+        "logo probability" : 0.7
     },
     "footer" : {
-        "probability" : 1,
+        "probability" : 0.7,
         "height" : [30, 80],
-        "burocratic text prob" : 1
+        "burocratic text prob" : 0.6
     },
     "section" : {
         "split probability": 0.75,
@@ -52,9 +52,9 @@
             "subtitle" : 0.2,
             "corpus" : 1,
             "author" : 0.1,
-            "italic" : 0.2,
-            "dropcap" : 0.4,
-            "separator" : 0.5
+            "italic" : 0.4,
+            "dropcap" : 0.3,
+            "separator" : 0.4
         }
     }
 }
