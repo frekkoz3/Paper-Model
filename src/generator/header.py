@@ -33,7 +33,7 @@ class Header(Component):
         self.name = fake.sentence(nb_words=2, variable_nb_words=True)
         self.subtitle = fake.sentence(nb_words=4, variable_nb_words=True)
         self.date = f"{self.anchor.date.strftime('%B %d, %Y')}"
-        self.price = f"{round(random.random(), 1)}0 {random.choice(["£", "$", "¥", "€"])}"
+        self.price = f"{round(random.random(), 1)}0{random.choice(['£', '$', '¥', '€'])}"
         self.date_type = random.choice(['center', 'top-right', 'bottom-right', 'none'])
         
 
