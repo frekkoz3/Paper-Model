@@ -29,7 +29,7 @@ if __name__ == '__main__':
         pretrained=True,
         freeze=10,
         device='cuda',
-        num_workers=4
+        workers=4
     )
     
     model.save("models/first_try_ft_rt_detr.pt")

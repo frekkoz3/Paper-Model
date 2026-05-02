@@ -29,7 +29,8 @@ if __name__ == '__main__':
         lr0=0.001,
         pretrained=True,
         freeze=10,
-        device='cuda'
+        device='cuda',
+        workers=4
     )
 
     model.save("models/third_try_ft_yolo26.pt")
