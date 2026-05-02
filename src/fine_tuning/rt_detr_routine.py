@@ -24,11 +24,12 @@ if __name__ == '__main__':
         data="configs/data.yaml",
         epochs=60,
         imgsz=1024,
-        batch=64,
+        batch=16,
         lr0=0.001,
         pretrained=True,
         freeze=10,
-        device='cuda'
+        device='cuda',
+        num_workers=4
     )
     
     model.save("models/first_try_ft_rt_detr.pt")
