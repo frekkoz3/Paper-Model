@@ -31,4 +31,4 @@ if __name__ == '__main__':
         device='cuda'
     )
     
-    model.save("models/third_try_ft_yolo26.pt")
+    model.save("models/first_try_ft_rt_detr.pt")
