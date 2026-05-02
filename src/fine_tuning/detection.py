@@ -15,10 +15,10 @@ import cv2
 
 if __name__ == "__main__":
 
-    model = YOLO("models/first_try_ft_yolo26.pt") # now only this one work. to understand how to fine tune the doclayout yolo 
+    model = YOLO("models/second_try_ft_yolo26.pt") # now only this one work. to understand how to fine tune the doclayout yolo 
 
     # Load image
-    image_name = "proof.png"
+    image_name = "piccolo_proof.png"
     image_path = f"imgs/{image_name}"
     image = cv2.imread(image_path)
 
