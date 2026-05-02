@@ -1,7 +1,7 @@
 # TODO
 
-[ ] Work on the augmentation : next-page noise
-[ ] Work on the HEADER and FOOTER :  WE NEED JUST TO ADD SOME LOGOS HERE AND THERE AND WE ARE GOOD
+[ ] Uniform images and output
+[ ] Try to integrate the link provided by the 300x250 project
 
 [ ] To write all the README
 [ ] Find the DOCLAYOUT fine tuning routine
