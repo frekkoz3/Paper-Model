@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
     model.train(
         data="configs/data.yaml",
-        epochs=60,
+        epochs=40,
         imgsz=1024,
         batch=16,
         lr0=0.001,
