@@ -23,8 +23,8 @@ if __name__ == '__main__':
     # Fine tuning
     model.train(
         data="configs/data.yaml",
-        epochs=50,
-        imgsz=640,
+        epochs=40,
+        imgsz=1024,
         batch=16,
         lr0=0.001,
         pretrained=True,
@@ -32,5 +32,6 @@ if __name__ == '__main__':
         device='cuda',
         workers=4
     )
-
-    model.save("models/third_try_ft_yolo26.pt")
+    
+    # resolution_number_modelname.pt
+    model.save("models/1024_1_yolo26.pt")

@@ -1,0 +1,14 @@
+# Models table
+
+|   Model's name	|   Dataset Version	|
+|---	|---	|
+|  640_1_yolo26 	|   0	| 
+|   640_2_yolo26	|   1	|
+|   1024_1_rt_detr	|   1	|
+|   1024_1_yolo26	|   1	|
+
+## Dataset version
+
+0. **No Header, No Footer, No Sections (labels), No augmentation**
+1. **Header, Footer, Augmentation, No Photos of Banner**
+2. **Header, Footer, Augmentation, No Sections (labels), Photos of Banners**

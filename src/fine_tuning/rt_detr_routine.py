@@ -31,5 +31,6 @@ if __name__ == '__main__':
         device='cuda',
         workers=4
     )
-    
-    model.save("models/first_try_ft_rt_detr.pt")
+
+    # resolution_number_modelname.pt
+    model.save("models/1024_2_rt_detr.pt")
