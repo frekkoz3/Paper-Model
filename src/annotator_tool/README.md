@@ -35,7 +35,7 @@ A lightweight Tkinter-based image annotation tool for creating YOLO-format bound
 
 ## Installation
 
-### Requirements
+### Stand alone Requirements
 
 ```bash
 pip install pillow
