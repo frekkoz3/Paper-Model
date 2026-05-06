@@ -6,3 +6,5 @@
 [ ] To write all the README
 [ ] Find the DOCLAYOUT fine tuning routine
 [ ] Start doing some ablation vs doclayout and yolo26
+
+[ ] Change the venv to python 3.12
