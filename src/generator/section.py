@@ -77,7 +77,7 @@ class Section(Component):
         n_banners = random.choices(self.anchor.banner_cfg["probability"][0], weights = self.anchor.banner_cfg["probability"][1])[0]
 
         for _ in range(n_banners):
-            banner = Banner(self.anchor, self.x, self.y, self.width, self.height, 5)
+            banner = Banner(self.anchor, self.x, self.y, self.width, self.height, 5, photo_prob=0.3)
             self.banners.append(banner)
 
         self.elements = []

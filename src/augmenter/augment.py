@@ -14,7 +14,7 @@ import cv2
 import numpy as np
 import random
 
-def ink_flip(img, threshold=100, p=0.1):
+def ink_flip(img, threshold=25, p=0.1):
     mask = (img < threshold).any(axis=2)
 
     # Generate flip mask (same spatial size)

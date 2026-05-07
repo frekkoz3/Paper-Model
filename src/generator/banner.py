@@ -30,15 +30,27 @@ import polars as pl
 from faker import Faker
 import random
 
+fake = Faker()
+
+with open("src/generator/banners_links_300_250.csv", "r") as f:
+    BANNER_URLS = [line.strip() for line in f if line.strip()]
+
 class Banner(Component):
 
+    def __init__(self, anchor_page, x, y, width, height, padding, photo_prob :int = 0.5):
+        self.photo_prob = photo_prob
+        super().__init__(anchor_page, x, y, width, height, padding)
+        
+
     def _generate(self):
-        self.img_url = f"https://picsum.photos/{int(self.width)}/{int(self.height)}?random"
+        if random.random() < self.photo_prob:
+            self.img_url = f"https://picsum.photos/{int(self.width)}/{int(self.height)}?random"
+        else:
+            self.img_url = random.choice(BANNER_URLS)
 
     def render(self):
         font_size = random.randint(5, 12)
 
-        fake = Faker()
         description = fake.sentence(nb_words=5, variable_nb_words=True)
 
         border_size = random.choice([0, 2, 4])
@@ -54,13 +66,16 @@ class Banner(Component):
         return f"""
         <div class="banner"
             style="
+                --banner-height:{self.height}px;
+                --banner-width:{self.width}px;"
                 --banner-font-size:{font_size}px;
                 --banner-border-size:{border_size}px;
                 --banner-text-alignment:{text_alignment};
             ">
             <img src="{self.img_url}" />
-            {description_html}
         </div>
+
+        {description_html}
         
         """
 

@@ -144,6 +144,13 @@ body {
     height: var(--logo-side);
 }
 
+.logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
 /* FOOTER */
 .footer {
     height: var(--footer-h); 
@@ -272,23 +279,24 @@ body {
 
 /* BANNER */
 .banner img {
-    width: 100%;
-    height: 100%;
+    width: var(--banner-width);
+    height: var(--banner-height);
     object-fit: cover;
     display: block;
 }
 
 .banner {
     break-inside: avoid;
-    border: var(--banner-border-size) solid black; 
+    border: var(--banner-border-size) solid black;
     overflow: hidden;
     box-sizing: border-box;
 }
 
-.banner .description {
+.description {
     font-size: var(--banner-font-size);
     text-align: var(--banner-text-alignment);
     margin-top: 5px;
+    margin-bottom: 8px;
 }
 
 /* VISUAL ELEMENTS */

@@ -11,9 +11,12 @@ r"""
     A simple rule-based model to generate realistical newspapers' pages for the training of the YOLO-Layout model.
 """
 from src.generator.component import Component
+from src.generator.banner import BANNER_URLS
 from src.generator.utils import random_logo
 from faker import Faker
 import random
+
+fake = Faker(['en_US', 'it_IT'])
 
 class Header(Component):
 
@@ -29,7 +32,6 @@ class Header(Component):
         - page number
         - 
         """
-        fake = Faker(['en_US', 'it_IT'])
         self.name = fake.sentence(nb_words=2, variable_nb_words=True)
         self.subtitle = fake.sentence(nb_words=4, variable_nb_words=True)
         self.date = f"{self.anchor.date.strftime('%B %d, %Y')}"
@@ -70,19 +72,23 @@ class Header(Component):
         if random.random() < self.anchor.header_cfg["lower probability"]:
             div_bottom = f"""{''.join(lower_lines) if lower_lines else ''}"""
         
-        # Logo -> THIS MUST BE IMPLEMENTED -> could be a subclass of banner
-        # look at this https://github.com/msn199959/Logo-2k-plus-Dataset
         logo_side = random.randint(30, 60)
-        logo_sx = f"""
-            <div class="logo left">
-            {random_logo(logo_side) if random.random() < self.anchor.header_cfg["logo probability"] else ""}
+        
+        def make_logo(side):
+            if random.random() < self.anchor.header_cfg["logo probability"]:
+                img = f'<img src="{random.choice(BANNER_URLS)}">'
+            else:
+                img = ""
+
+            return f"""
+            <div class="logo {side}" style="
+                --logo-side:{logo_side}px;">
+                {img}
             </div>
-        """
-        logo_dx = f"""
-            <div class="logo right">
-            {random_logo(logo_side) if random.random() < self.anchor.header_cfg["logo probability"] else ""}
-            </div>
-        """
+            """
+
+        logo_sx = make_logo("left")
+        logo_dx = make_logo("right")
 
         # Subtitle
         subt = ""

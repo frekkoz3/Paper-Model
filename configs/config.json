@@ -30,12 +30,12 @@
         "upper probability" : 0.6,
         "lower probability" : 0.6,
         "subtitle" : 0.6,
-        "logo probability" : 0.7
+        "logo probability" : 0.8
     },
     "footer" : {
         "probability" : 0.7,
         "height" : [30, 80],
-        "burocratic text prob" : 0.6
+        "burocratic text prob" : 0.5
     },
     "section" : {
         "split probability": 0.75,

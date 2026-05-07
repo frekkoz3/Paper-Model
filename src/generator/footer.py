@@ -15,6 +15,8 @@ from src.generator.component import Component
 from faker import Faker
 import random
 
+fake = Faker()
+
 class Footer(Component):
 
     def _generate(self):
@@ -28,7 +30,7 @@ class Footer(Component):
         - legal/burocratic little text
         - page number
         """
-        fake = Faker()
+
         self.footer_text = fake.sentence(nb_words = 2)
         self.burocratic_text = fake.sentence(nb_words = 40, variable_nb_words=True)
 
