@@ -34,4 +34,4 @@ if __name__ == '__main__':
     )
     
     # resolution_number_modelname.pt
-    model.save("models/1024_1_yolo26.pt")
+    model.save("models/1024_2_yolo26.pt")
