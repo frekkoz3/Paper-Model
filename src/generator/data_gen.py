@@ -115,9 +115,14 @@ def generate_train_and_validation_set(
 
     try:
 
+        if verbose == 1:
+            print("Starting playwright")
+
         with sync_playwright() as p:
 
             if verbose == 1:
+                print("Playwright started")
+                print("----------------------------------------")   
                 print("Browser setup")
 
             browser = p.chromium.launch(headless=True)
@@ -201,6 +206,8 @@ def generate_train_and_validation_set(
 
 if __name__ == '__main__':
 
+    print("Parsing argument")
+
     parser = argparse.ArgumentParser(description="Generate dataset (train + val)")
 
     parser.add_argument("--train_size", type=int, default=10)
@@ -213,6 +220,9 @@ if __name__ == '__main__':
     parser.add_argument("--verbose", type=int, default=2)
 
     args = parser.parse_args()
+
+    print("Parsing done")
+    print("---------------------------")
 
     generate_train_and_validation_set(
         train_size=args.train_size,
