@@ -117,8 +117,21 @@ def generate_train_and_validation_set(
 
         with sync_playwright() as p:
 
+            if verbose == 1:
+                print("Browser setup")
+
             browser = p.chromium.launch(headless=True)
+
+            if verbose == 1:
+                print("Setup finished")
+                print("----------------------------------------")
+                print("Loading page")
+
             browser_page = browser.new_page()
+
+            if verbose == 1:
+                print("Page loaded")
+                print("----------------------------------------")
 
             img_path = train_img_path / img_name
             lab_path = train_lbl_path / img_name
