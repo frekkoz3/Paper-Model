@@ -13,7 +13,7 @@ r"""
 print("Hi")
 
 from src.generator.page import Page, get_labels_from_page
-from playwright.sync_api import sync_playwright
+#from playwright.sync_api import sync_playwright
 from src.augmenter.augment import augment_page
 
 from pathlib import Path
