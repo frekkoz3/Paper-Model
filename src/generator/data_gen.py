@@ -10,6 +10,8 @@ r"""
 
     A simple rule-based model to generate realistical newspapers' pages for the training of the YOLO-Layout model.
 """
+print("Hi")
+
 from src.generator.page import Page, get_labels_from_page
 from playwright.sync_api import sync_playwright
 from src.augmenter.augment import augment_page
