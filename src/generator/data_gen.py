@@ -113,17 +113,10 @@ def generate_train_and_validation_set(
     val_lbl_path.mkdir(parents=True, exist_ok=True)
     val_html_path.mkdir(parents=True, exist_ok=True)
 
-    with open("debug.txt", "+a") as f:
-        f.write("Hi\n")
-
     try:
 
         if verbose == 1:
             print("Starting playwright")
-
-        with open("debug.txt", "+a") as f:
-            f.write("Again\n")
-
 
         with sync_playwright() as p:
 
