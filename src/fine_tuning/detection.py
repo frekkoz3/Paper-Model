@@ -15,10 +15,12 @@ import cv2
 
 if __name__ == "__main__":
 
-    model = YOLO("models/second_try_ft_yolo26.pt") # now only this one work. to understand how to fine tune the doclayout yolo 
+    model_name = "1024_2_yolo26"
+
+    model = YOLO(f"models/{model_name}.pt") # now only this one work. to understand how to fine tune the doclayout yolo 
     #model = RTDETR("models/first_try_ft_rt_detr.pt")
     # Load image
-    image_name = "proof.png"
+    image_name = "piccolo_proof.png"
     image_path = f"imgs/{image_name}"
     image = cv2.imread(image_path)
 
@@ -29,4 +31,4 @@ if __name__ == "__main__":
     annotated = results[0].plot()
 
     # Save result
-    cv2.imwrite(f"imgs/rt_detr_annotated_{image_name}", annotated)
+    cv2.imwrite(f"imgs/{model_name}_annotated_{image_name}", annotated)
