@@ -1,6 +1,7 @@
 # TODO
 
-[ ] Using or not the section labels?
+[ ] Using or not the sections' labels?
+[ ] Migrating weights on hf
 
 [ ] To write all the README
 [ ] Start doing some ablation vs doclayout and yolo26
