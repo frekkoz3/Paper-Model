@@ -15,12 +15,13 @@ import cv2
 
 if __name__ == "__main__":
 
-    model_name = "1024_2_yolo26"
+    #model_name = "1024_2_yolo26"
+    model_name = "1024_3_rt_detr"
 
-    model = YOLO(f"models/{model_name}.pt") # now only this one work. to understand how to fine tune the doclayout yolo 
-    #model = RTDETR("models/first_try_ft_rt_detr.pt")
+    #model = YOLO(f"models/{model_name}.pt") # now only this one work. to understand how to fine tune the doclayout yolo 
+    model = RTDETR(f"models/{model_name}.pt")
     # Load image
-    image_name = "piccolo_proof.png"
+    image_name = "proof.png"
     image_path = f"imgs/{image_name}"
     image = cv2.imread(image_path)
 
