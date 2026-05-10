@@ -142,6 +142,8 @@ class Section(Component):
 
     def render(self):
 
+        column_style = random.choices(["dotted", "solid", "none"], weights=[1, 10, 2])
+
         html = f"""
         <section class="section"
             style="
@@ -152,7 +154,8 @@ class Section(Component):
                 --cols:{self.n_columns};
                 --gap:{self.anchor.column_gap}px;
                 --section-padding:{self.padding}px;
-                --title-font-size:{self.title_font_size}px;">
+                --title-font-size:{self.title_font_size}px;
+                --column-rule:{column_style};">
             <div class="section-content">
         """
         def random_separator(p):

@@ -219,7 +219,7 @@ body {
 .section-content {
     column-count: var(--cols);
     column-gap: var(--gap);
-    column-rule: solid 2px;
+    column-rule: var(--column-rule);
 }
 
 .section-title {

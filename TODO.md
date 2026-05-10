@@ -1,6 +1,6 @@
 # TODO
 
-[ ] To understand rate limit of the urls for banners.
+[ ] Using or not the section labels?
 
 [ ] To write all the README
 [ ] Start doing some ablation vs doclayout and yolo26
