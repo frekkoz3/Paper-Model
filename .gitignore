@@ -28,3 +28,6 @@ runs/
 
 # hugging face token
 hf_token.txt
+
+# 300x250 dataset
+resources/300x250/

@@ -29,11 +29,18 @@ from src.generator.component import Component
 import polars as pl
 from faker import Faker
 import random
+from src.utils import download_300x250_parallel
+from pathlib import Path
 
 fake = Faker()
 
-with open("src/generator/banners_links_300_250.csv", "r") as f:
-    BANNER_URLS = [line.strip() for line in f if line.strip()]
+if not Path("resources/300x250").exists():
+    print("Wait a bit. We are gonna download the 300x250 dataset.")
+    download_300x250_parallel(50)
+    print("Done, now we will proceede.")
+
+folder = Path("resources/300x250").resolve()
+BANNER_URLS = [f.as_uri() for f in folder.iterdir() if f.is_file()]
 
 class Banner(Component):
 
@@ -72,7 +79,7 @@ class Banner(Component):
                 --banner-border-size:{border_size}px;
                 --banner-text-alignment:{text_alignment};
             ">
-            <img src="{self.img_url}" />
+            <img src="{self.img_url}" width={self.width - 2*border_size} height={self.height - 2*border_size}/>
         </div>
 
         {description_html}
@@ -81,16 +88,5 @@ class Banner(Component):
 
 if __name__ == '__main__':
 
-    # this does not work for now, waiting the response from the guys of the AdImageNet
-    try:
-        with open("configs/hf_token.txt", "r") as f:
-            hf_token = f.read()
-    except Exception as e:
-        print(e)
-        print("Check the README in the configs folder")
-
-    df = pl.read_parquet('hf://datasets/PeterBrendan/AdImageNet/data/train-*.parquet', 
-                         storage_options={"token": hf_token})
-    
-    print(df.head())
+    print(BANNER_URLS)
 
