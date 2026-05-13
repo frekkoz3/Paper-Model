@@ -161,4 +161,4 @@ def download_300x250_parallel(
 
 if __name__ == '__main__':
 
-    download_300x250_parallel(50)
+    download_300x250_parallel()
