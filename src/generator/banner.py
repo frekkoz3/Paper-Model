@@ -36,7 +36,7 @@ fake = Faker()
 
 if not Path("resources/300x250").exists():
     print("Wait a bit. We are gonna download the 300x250 dataset.")
-    download_300x250_parallel(50)
+    download_300x250_parallel()
     print("Done, now we will proceede.")
 
 folder = Path("resources/300x250").resolve()
@@ -87,6 +87,5 @@ class Banner(Component):
         """
 
 if __name__ == '__main__':
-
-    print(BANNER_URLS)
+    pass
 
