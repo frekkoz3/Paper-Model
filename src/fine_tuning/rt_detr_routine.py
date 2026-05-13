@@ -34,4 +34,4 @@ if __name__ == '__main__':
     )
 
     # resolution_number_modelname.pt
-    model.save("models/1024_3_rt_detr.pt")
+    model.save("models/1024_4_rt_detr.pt")
