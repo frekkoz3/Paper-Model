@@ -10,10 +10,17 @@ r"""
 
     A simple rule-based model to generate realistical newspapers' pages for the training of the YOLO-Layout model.
 """
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
 from ultralytics import YOLO, RTDETR
 import cv2
 
-from huggingface_hub import hf_hub_download
+from huggingface_hub import login, hf_hub_download
+
+login(token=os.environ["HF_TOKEN"])
 
 if __name__ == "__main__":
 
@@ -24,8 +31,7 @@ if __name__ == "__main__":
 
     model_path = hf_hub_download(
         repo_id=repo_id,
-        filename=model_name,
-        resume_download=True
+        filename=model_name
     )
 
     model = YOLO(model_path) if using_yolo else RTDETR(model_path)
