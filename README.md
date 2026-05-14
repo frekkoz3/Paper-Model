@@ -116,3 +116,44 @@ py -m src.generator.data_gen --train_size 1 --val_size 1 --verbose 1
 ```
 
 If this works, there are no problems then.
+
+## Dataset Version History
+
+This section summarizes the evolution of the synthetic dataset generated with the Paper Model project.  
+Each version introduces additional layout elements and improvements used to train the released models.
+
+Models trained on a specific dataset version use the corresponding generator configuration listed below.  
+Generating a new dataset with the current version of the project will produce the latest dataset format.
+
+### V3 *(latest)*
+
+Introduced multiple styles of vertical separators between columns to increase layout variability and improve structural realism.
+
+### V2
+
+Added real banner images sourced from the following project:
+
+- [300x250 Project](https://project300x250.com/?utm_source=chatgpt.com)
+
+### V1
+
+Introduced:
+
+- Headers
+- Footers
+- Section labels
+- Data augmentation
+
+### V0
+
+Initial dataset version featuring:
+
+- Columns
+- Banner placeholders
+
+This version did **not** include:
+
+- Headers
+- Footers
+- Section labels
+- Data augmentation

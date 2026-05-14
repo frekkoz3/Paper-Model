@@ -15,7 +15,4 @@
 
 ## Dataset version
 
-0. **No Header, No Footer, No Sections (labels), No augmentation**
-1. **Header, Footer, Augmentation, No Photos of Banner**
-2. **Header, Footer, Augmentation, Photos of Banners**
-3. **Header, Footer, Augmentation, Photos of Banners, Multiple type of Vertical Separator**
+Refers to the main README.
