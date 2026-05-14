@@ -11,6 +11,7 @@ r"""
     A simple rule-based model to generate realistical newspapers' pages for the training of the YOLO-Layout model.
 """
 from ultralytics import RTDETR
+from huggingface_hub import upload_file
 
 if __name__ == '__main__':
 
@@ -33,5 +34,15 @@ if __name__ == '__main__':
         workers=4
     )
 
-    # resolution_number_modelname.pt
-    model.save("models/1024_4_rt_detr.pt")
+    name = "1024_0_v3_rt_detr.pt"
+    local_path = f"models/{name}"
+    # resolution_number_datasetversion_modelname.pt
+    model.save(local_path)
+
+    repo_id = "frekko/paper_model_rt_detr"
+
+    upload_file(
+        path_or_fileobj=local_path,
+        path_in_repo=name,
+        repo_id=repo_id,
+    )

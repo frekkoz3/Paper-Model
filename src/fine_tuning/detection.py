@@ -13,13 +13,23 @@ r"""
 from ultralytics import YOLO, RTDETR
 import cv2
 
+from huggingface_hub import hf_hub_download
+
 if __name__ == "__main__":
 
-    model_name = "1024_3_yolo26"
-    #model_name = "1024_3_rt_detr"
+    using_yolo = False
 
-    model = YOLO(f"models/{model_name}.pt") # now only this one work. to understand how to fine tune the doclayout yolo 
-    #model = RTDETR(f"models/{model_name}.pt")
+    repo_id = "frekko/paper_model_yolo26" if using_yolo else "frekko/paper_model_rt_detr"
+    model_name = "1024_0_v2_yolo26.pt" if using_yolo else "1024_0_v2_rt_detr.pt"
+
+    model_path = hf_hub_download(
+        repo_id=repo_id,
+        filename=model_name,
+        resume_download=True
+    )
+
+    model = YOLO(model_path) if using_yolo else RTDETR(model_path)
+
     # Load image
     image_name = "synthetic_proof.png"
     image_path = f"imgs/{image_name}"
