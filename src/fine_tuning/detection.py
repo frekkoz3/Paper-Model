@@ -17,16 +17,14 @@ load_dotenv()
 from ultralytics import YOLO, RTDETR
 import cv2
 
-from huggingface_hub import hf_hub_download, whoami
+from huggingface_hub import hf_hub_download
 
 if __name__ == "__main__":
-
-    print(whoami(token=True))
 
     using_yolo = False
 
     repo_id = "frekko/paper_model_yolo26" if using_yolo else "frekko/paper_model_rt_detr"
-    model_name = "1024_0_v2_yolo26.pt" if using_yolo else "1024_0_v2_rt_detr.pt"
+    model_name = "1024_0_v2_yolo26.pt" if using_yolo else "1024_0_v3_rt_detr.pt"
 
     model_path = hf_hub_download(
         repo_id=repo_id,
@@ -37,7 +35,7 @@ if __name__ == "__main__":
     model = YOLO(model_path) if using_yolo else RTDETR(model_path)
 
     # Load image
-    image_name = "synthetic_proof.png"
+    image_name = "piccolo_proof.png"
     image_path = f"imgs/{image_name}"
     image = cv2.imread(image_path)
 
